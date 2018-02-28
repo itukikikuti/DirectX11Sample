@@ -15,7 +15,7 @@ const wchar_t* NAME = L"XLibrary11";
 const unsigned int WIDTH = 1280;
 const unsigned int HEIGHT = 720;
 LRESULT CALLBACK ProceedWindow(HWND, UINT, WPARAM, LPARAM);
-void CompileShader(const wchar_t* filePath, const char* entryPoint, const char* shaderModel, ID3DBlob** out);
+void CompileShader(const wchar_t* const filePath, const char* const entryPoint, const char* const shaderModel, ID3DBlob** out);
 
 struct Vertex {
 	DirectX::XMFLOAT3 position;
@@ -201,7 +201,7 @@ LRESULT WINAPI ProceedWindow(HWND handle, UINT message, WPARAM wParam, LPARAM lP
 	return DefWindowProcW(handle, message, wParam, lParam);
 }
 
-void CompileShader(const wchar_t* filePath, const char* entryPoint, const char* shaderModel, ID3DBlob** out)
+void CompileShader(const wchar_t* const filePath, const char* const entryPoint, const char* const shaderModel, ID3DBlob** out)
 {
 	DWORD flags = D3DCOMPILE_ENABLE_STRICTNESS;
 #if defined(DEBUG) || defined(_DEBUG)
