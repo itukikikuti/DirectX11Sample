@@ -1,19 +1,7 @@
-#define OEMRESOURCE
-#include <Windows.h>
-#include <d3d11.h>
-#include <d3dcompiler.h>
-#include <DirectXMath.h>
-#include <wrl.h>
-
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "d3dcompiler.lib")
+#include "App.hpp"
 
 #define SIZE(a) (sizeof(a) / sizeof(a[0]))
 
-const wchar_t* NAME = L"Test";
-const unsigned int WIDTH = 1280;
-const unsigned int HEIGHT = 720;
-LRESULT CALLBACK ProceedWindow(HWND, UINT, WPARAM, LPARAM);
 void CompileShader(const wchar_t* const filePath, const char* const entryPoint, const char* const shaderModel, ID3DBlob** out);
 
 struct Vertex {
@@ -27,36 +15,9 @@ struct Constant {
 	DirectX::XMMATRIX projection;
 };
 
-int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
+int Main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-
-	WNDCLASSW windowClass = {};
-	windowClass.style = 0;
-	windowClass.lpfnWndProc = ProceedWindow;
-	windowClass.cbClsExtra = 0;
-	windowClass.cbWndExtra = 0;
-	windowClass.hInstance = hinstance;
-	windowClass.hIcon = nullptr;
-	windowClass.hCursor = static_cast<HCURSOR>(LoadImageW(nullptr, MAKEINTRESOURCEW(OCR_NORMAL), IMAGE_CURSOR, 0, 0, LR_DEFAULTSIZE | LR_SHARED));
-	windowClass.hbrBackground = nullptr;
-	windowClass.lpszMenuName = nullptr;
-	windowClass.lpszClassName = NAME;
-	RegisterClassW(&windowClass);
-
-	HWND hwindow = CreateWindowW(NAME, NAME, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 0, 0, nullptr, nullptr, hinstance, nullptr);
-
-	RECT windowRect = {};
-	RECT clientRect = {};
-	GetWindowRect(hwindow, &windowRect);
-	GetClientRect(hwindow, &clientRect);
-	int w = (windowRect.right - windowRect.left) - (clientRect.right - clientRect.left) + WIDTH;
-	int h = (windowRect.bottom - windowRect.top) - (clientRect.bottom - clientRect.top) + HEIGHT;
-	int x = (GetSystemMetrics(SM_CXSCREEN) - w) / 2;
-	int y = (GetSystemMetrics(SM_CYSCREEN) - h) / 2;
-	SetWindowPos(hwindow, nullptr, x, y, w, h, SWP_FRAMECHANGED);
-
-	ShowWindow(hwindow, SW_SHOWNORMAL);
 
 	D3D_FEATURE_LEVEL featureLevels[] =
 	{
@@ -66,8 +27,8 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 	};
 
 	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
-	swapChainDesc.BufferDesc.Width = WIDTH;
-	swapChainDesc.BufferDesc.Height = HEIGHT;
+	swapChainDesc.BufferDesc.Width = App::GetWindowSize().x;
+	swapChainDesc.BufferDesc.Height = App::GetWindowSize().y;
 	swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
 	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
 	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
@@ -75,7 +36,7 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 	swapChainDesc.SampleDesc.Quality = 0;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.BufferCount = 1;
-	swapChainDesc.OutputWindow = hwindow;
+	swapChainDesc.OutputWindow = App::GetWindowHandle();
 	swapChainDesc.Windowed = true;
 	swapChainDesc.Flags = 0;
 
@@ -95,8 +56,8 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 	D3D11_VIEWPORT viewPort = {};
 	viewPort.TopLeftX = 0.0f;
 	viewPort.TopLeftY = 0.0f;
-	viewPort.Width = WIDTH;
-	viewPort.Height = HEIGHT;
+	viewPort.Width = App::GetWindowSize().x;
+	viewPort.Height = App::GetWindowSize().y;
 	viewPort.MinDepth = 0.0f;
 	viewPort.MaxDepth = 1.0f;
 	context->RSSetViewports(1, &viewPort);
@@ -147,7 +108,7 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 	Constant constant;
 	constant.world = DirectX::XMMatrixIdentity();
 	constant.view = DirectX::XMMatrixTranslation(0.0f, 0.0f, 5.0f);
-	constant.projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), WIDTH / HEIGHT, 0.1f, 100.0f);
+	constant.projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), App::GetWindowSize().x / (float)App::GetWindowSize().y, 0.1f, 100.0f);
 
 	MSG message = {};
 	float angle = 0.0f;
@@ -187,17 +148,6 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 	}
 
 	return 0;
-}
-
-LRESULT WINAPI ProceedWindow(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	switch (message)
-	{
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
-	}
-	return DefWindowProcW(handle, message, wParam, lParam);
 }
 
 void CompileShader(const wchar_t* const filePath, const char* const entryPoint, const char* const shaderModel, ID3DBlob** out)
