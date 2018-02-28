@@ -11,7 +11,7 @@
 
 #define SIZE(a) (sizeof(a) / sizeof(a[0]))
 
-const wchar_t* NAME = L"01DrawTriangle";
+const wchar_t* NAME = L"Test";
 const unsigned int WIDTH = 1280;
 const unsigned int HEIGHT = 720;
 LRESULT CALLBACK ProceedWindow(HWND, UINT, WPARAM, LPARAM);
