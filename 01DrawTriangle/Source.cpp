@@ -1,14 +1,13 @@
 #define OEMRESOURCE
+#include <vector>
 #include <Windows.h>
+#include <wrl.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
-#include <wrl.h>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
-
-#define SIZE(a) (sizeof(a) / sizeof(a[0]))
 
 const wchar_t* NAME = L"01DrawTriangle";
 const unsigned int WIDTH = 1280;
@@ -58,7 +57,7 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 
 	ShowWindow(hwindow, SW_SHOWNORMAL);
 
-	D3D_FEATURE_LEVEL featureLevels[] =
+	std::vector<D3D_FEATURE_LEVEL> featureLevels
 	{
 		D3D_FEATURE_LEVEL_11_0,
 		D3D_FEATURE_LEVEL_10_1,
@@ -82,7 +81,7 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 	Microsoft::WRL::ComPtr<ID3D11Device> device = nullptr;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context = nullptr;
-	D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, featureLevels, SIZE(featureLevels), D3D11_SDK_VERSION, &swapChainDesc, swapChain.GetAddressOf(), device.GetAddressOf(), nullptr, context.GetAddressOf());
+	D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, featureLevels.data(), featureLevels.size(), D3D11_SDK_VERSION, &swapChainDesc, swapChain.GetAddressOf(), device.GetAddressOf(), nullptr, context.GetAddressOf());
 
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -101,7 +100,7 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 	viewPort.MaxDepth = 1.0f;
 	context->RSSetViewports(1, &viewPort);
 
-	Vertex vertices[] =
+	std::vector<Vertex> vertices
 	{
 		{ DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f), DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f) },
 		{ DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
@@ -109,13 +108,13 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 	};
 	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
 	D3D11_BUFFER_DESC vertexBufferDesc = {};
-	vertexBufferDesc.ByteWidth = sizeof(Vertex) * SIZE(vertices);
+	vertexBufferDesc.ByteWidth = sizeof(Vertex) * vertices.size();
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
 	D3D11_SUBRESOURCE_DATA vertexSubresourceData = {};
-	vertexSubresourceData.pSysMem = vertices;
+	vertexSubresourceData.pSysMem = vertices.data();
 	device->CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, vertexBuffer.GetAddressOf());
 
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader = nullptr;
@@ -129,12 +128,12 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 	device->CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), nullptr, pixelShader.GetAddressOf());
 
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout = nullptr;
-	D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
+	std::vector<D3D11_INPUT_ELEMENT_DESC> inputElementDesc
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
-	device->CreateInputLayout(inputElementDesc, SIZE(inputElementDesc), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), inputLayout.GetAddressOf());
+	device->CreateInputLayout(inputElementDesc.data(), inputElementDesc.size(), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), inputLayout.GetAddressOf());
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer = nullptr;
 	D3D11_BUFFER_DESC constantBufferDesc = {};
@@ -180,7 +179,7 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 			static float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 			context->ClearRenderTargetView(renderTargetView.Get(), color);
 
-			context->Draw(SIZE(vertices), 0);
+			context->Draw(vertices.size(), 0);
 
 			swapChain->Present(1, 0);
 		}
