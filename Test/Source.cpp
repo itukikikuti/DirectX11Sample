@@ -4,7 +4,6 @@
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 #include <wrl.h>
-#include <type_traits>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
