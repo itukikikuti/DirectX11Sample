@@ -6,6 +6,7 @@ class Material
 	PROTECTED Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader = nullptr;
 	PROTECTED Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout = nullptr;
 
+	PUBLIC Material() {}
 	PUBLIC Material(const wchar_t* const filePath)
 	{
 		Load(filePath);
