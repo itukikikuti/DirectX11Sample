@@ -19,7 +19,7 @@
 
 class App final
 {
-	PUBLIC static constexpr wchar_t* const NAME = L"04MaterialClass";
+	PUBLIC static constexpr wchar_t* const NAME = L"05MeshClass";
 
 #include "Window.hpp"
 #include "Graphics.hpp"
