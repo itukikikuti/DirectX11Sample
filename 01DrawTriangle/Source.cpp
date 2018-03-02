@@ -12,7 +12,7 @@
 const wchar_t* NAME = L"01DrawTriangle";
 const unsigned int WIDTH = 1280;
 const unsigned int HEIGHT = 720;
-LRESULT CALLBACK ProceedWindow(HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK ProceedMessage(HWND, UINT, WPARAM, LPARAM);
 void CompileShader(const wchar_t* const filePath, const char* const entryPoint, const char* const shaderModel, ID3DBlob** out);
 
 struct Vertex {
@@ -32,7 +32,7 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 
 	WNDCLASSW windowClass = {};
 	windowClass.style = 0;
-	windowClass.lpfnWndProc = ProceedWindow;
+	windowClass.lpfnWndProc = ProceedMessage;
 	windowClass.cbClsExtra = 0;
 	windowClass.cbWndExtra = 0;
 	windowClass.hInstance = hinstance;
@@ -190,7 +190,7 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 	return 0;
 }
 
-LRESULT CALLBACK ProceedWindow(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK ProceedMessage(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{

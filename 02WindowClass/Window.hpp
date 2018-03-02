@@ -13,7 +13,7 @@ class Window
 
 		WNDCLASSW windowClass = {};
 		windowClass.style = 0;
-		windowClass.lpfnWndProc = Proceed;
+		windowClass.lpfnWndProc = ProceedMessage;
 		windowClass.cbClsExtra = 0;
 		windowClass.cbWndExtra = 0;
 		windowClass.hInstance = instance;
@@ -69,7 +69,7 @@ class Window
 
 		return true;
 	}
-	PRIVATE static LRESULT CALLBACK Proceed(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
+	PRIVATE static LRESULT CALLBACK ProceedMessage(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		switch (message)
 		{
