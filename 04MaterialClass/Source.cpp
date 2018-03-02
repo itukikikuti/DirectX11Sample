@@ -1,11 +1,13 @@
 #include "App.hpp"
 
-struct Vertex {
+struct Vertex
+{
 	DirectX::XMFLOAT3 position;
 	DirectX::XMFLOAT3 color;
 };
 
-struct Constant {
+struct Constant
+{
 	DirectX::XMMATRIX world;
 	DirectX::XMMATRIX view;
 	DirectX::XMMATRIX projection;

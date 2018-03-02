@@ -2,12 +2,14 @@
 
 void CompileShader(const wchar_t* const filePath, const char* const entryPoint, const char* const shaderModel, ID3DBlob** out);
 
-struct Vertex {
+struct Vertex
+{
 	DirectX::XMFLOAT3 position;
 	DirectX::XMFLOAT3 color;
 };
 
-struct Constant {
+struct Constant
+{
 	DirectX::XMMATRIX world;
 	DirectX::XMMATRIX view;
 	DirectX::XMMATRIX projection;
