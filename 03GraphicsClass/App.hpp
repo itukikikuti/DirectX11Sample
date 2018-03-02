@@ -17,7 +17,7 @@
 #define PRIVATE private:
 #define PROTECTED protected:
 
-class App
+class App final
 {
 	PUBLIC static constexpr wchar_t* const NAME = L"03GraphicsClass";
 
