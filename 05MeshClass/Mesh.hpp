@@ -16,7 +16,7 @@ class Mesh
 	PUBLIC std::vector<Vertex> vertices;
 	PUBLIC Material material;
 	PROTECTED Constant constant;
-	PROTECTED Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
+	PROTECTED ATL::CComPtr<ID3D11Buffer> vertexBuffer = nullptr;
 
 	PUBLIC Mesh()
 	{
@@ -41,7 +41,7 @@ class Mesh
 	{
 		if (vertices.size() > 0)
 		{
-			vertexBuffer.Reset();
+			vertexBuffer.Release();
 			D3D11_BUFFER_DESC vertexBufferDesc = {};
 			vertexBufferDesc.ByteWidth = sizeof(Vertex) * vertices.size();
 			vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -50,7 +50,7 @@ class Mesh
 			vertexBufferDesc.MiscFlags = 0;
 			D3D11_SUBRESOURCE_DATA vertexSubresourceData = {};
 			vertexSubresourceData.pSysMem = vertices.data();
-			App::GetGraphicsDevice().CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, vertexBuffer.GetAddressOf());
+			App::GetGraphicsDevice().CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, &vertexBuffer);
 		}
 
 		material.SetBuffer(&constant, sizeof(constant));
@@ -66,7 +66,7 @@ class Mesh
 
 		UINT stride = sizeof(Vertex);
 		UINT offset = 0;
-		App::GetGraphicsContext().IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+		App::GetGraphicsContext().IASetVertexBuffers(0, 1, &vertexBuffer.p, &stride, &offset);
 
 		material.Attach();
 
