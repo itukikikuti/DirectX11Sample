@@ -56,8 +56,8 @@ int Main()
 	D3D11_VIEWPORT viewPort = {};
 	viewPort.TopLeftX = 0.0f;
 	viewPort.TopLeftY = 0.0f;
-	viewPort.Width = App::GetWindowSize().x;
-	viewPort.Height = App::GetWindowSize().y;
+	viewPort.Width = static_cast<float>(App::GetWindowSize().x);
+	viewPort.Height = static_cast<float>(App::GetWindowSize().y);
 	viewPort.MinDepth = 0.0f;
 	viewPort.MaxDepth = 1.0f;
 	context->RSSetViewports(1, &viewPort);

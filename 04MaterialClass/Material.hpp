@@ -1,6 +1,6 @@
 class Material
 {
-	PROTECTED void* cbuffer = nullptr;
+	PROTECTED void* buffer = nullptr;
 	PROTECTED ATL::CComPtr<ID3D11Buffer> constantBuffer = nullptr;
 	PROTECTED ATL::CComPtr<ID3D11VertexShader> vertexShader = nullptr;
 	PROTECTED ATL::CComPtr<ID3D11PixelShader> pixelShader = nullptr;
@@ -38,7 +38,7 @@ class Material
 	}
 	PUBLIC void SetBuffer(void* cbuffer, size_t size)
 	{
-		this->cbuffer = cbuffer;
+		buffer = cbuffer;
 
 		constantBuffer.Release();
 		D3D11_BUFFER_DESC constantBufferDesc = {};
@@ -50,9 +50,9 @@ class Material
 	}
 	PUBLIC void Attach()
 	{
-		if (cbuffer != nullptr)
+		if (buffer != nullptr)
 		{
-			App::GetGraphicsContext().UpdateSubresource(constantBuffer, 0, nullptr, cbuffer, 0, 0);
+			App::GetGraphicsContext().UpdateSubresource(constantBuffer, 0, nullptr, buffer, 0, 0);
 			App::GetGraphicsContext().VSSetConstantBuffers(0, 1, &constantBuffer.p);
 		}
 

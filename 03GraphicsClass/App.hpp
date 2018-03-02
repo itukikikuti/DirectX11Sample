@@ -12,7 +12,7 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
-#define Main() APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
+#define Main() APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 #define PUBLIC public:
 #define PRIVATE private:
 #define PROTECTED protected:
