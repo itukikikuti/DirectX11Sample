@@ -1,9 +1,9 @@
 class Graphics
 {
-	PRIVATE Microsoft::WRL::ComPtr<ID3D11Device> device = nullptr;
-	PRIVATE Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain = nullptr;
-	PRIVATE Microsoft::WRL::ComPtr<ID3D11DeviceContext> context = nullptr;
-	PRIVATE Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView = nullptr;
+	PRIVATE ATL::CComPtr<ID3D11Device> device = nullptr;
+	PRIVATE ATL::CComPtr<IDXGISwapChain> swapChain = nullptr;
+	PRIVATE ATL::CComPtr<ID3D11DeviceContext> context = nullptr;
+	PRIVATE ATL::CComPtr<ID3D11RenderTargetView> renderTargetView = nullptr;
 
 	PUBLIC Graphics()
 	{
@@ -37,14 +37,14 @@ class Graphics
 		swapChainDesc.OutputWindow = App::GetWindowHandle();
 		swapChainDesc.Windowed = true;
 		swapChainDesc.Flags = 0;
-		D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, flags, featureLevels.data(), featureLevels.size(), D3D11_SDK_VERSION, &swapChainDesc, swapChain.GetAddressOf(), device.GetAddressOf(), nullptr, context.GetAddressOf());
+		D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, flags, featureLevels.data(), featureLevels.size(), D3D11_SDK_VERSION, &swapChainDesc, &swapChain, &device, nullptr, &context);
 
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-		Microsoft::WRL::ComPtr<ID3D11Texture2D> renderTexture = nullptr;
-		swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(renderTexture.GetAddressOf()));
+		ATL::CComPtr<ID3D11Texture2D> renderTexture = nullptr;
+		swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&renderTexture));
 
-		device->CreateRenderTargetView(renderTexture.Get(), nullptr, renderTargetView.GetAddressOf());
+		device->CreateRenderTargetView(renderTexture, nullptr, &renderTargetView);
 
 		D3D11_VIEWPORT viewPort = {};
 		viewPort.TopLeftX = 0.0f;
@@ -57,19 +57,19 @@ class Graphics
 	}
 	PUBLIC ID3D11Device& GetDevice() const
 	{
-		return *device.Get();
+		return *device;
 	}
 	PUBLIC ID3D11DeviceContext& GetContext() const
 	{
-		return *context.Get();
+		return *context;
 	}
 	PUBLIC void Update()
 	{
 		swapChain->Present(1, 0);
 
-		context->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), nullptr);
+		context->OMSetRenderTargets(1, &renderTargetView.p, nullptr);
 
 		static float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		context->ClearRenderTargetView(renderTargetView.Get(), color);
+		context->ClearRenderTargetView(renderTargetView, color);
 	}
 };

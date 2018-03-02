@@ -25,7 +25,7 @@ int Main()
 		{ DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
 		{ DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
 	};
-	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
+	ATL::CComPtr<ID3D11Buffer> vertexBuffer = nullptr;
 	D3D11_BUFFER_DESC vertexBufferDesc = {};
 	vertexBufferDesc.ByteWidth = sizeof(Vertex) * vertices.size();
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -34,33 +34,33 @@ int Main()
 	vertexBufferDesc.MiscFlags = 0;
 	D3D11_SUBRESOURCE_DATA vertexSubresourceData = {};
 	vertexSubresourceData.pSysMem = vertices.data();
-	App::GetGraphicsDevice().CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, vertexBuffer.GetAddressOf());
+	App::GetGraphicsDevice().CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, &vertexBuffer);
 
-	Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader = nullptr;
-	Microsoft::WRL::ComPtr<ID3DBlob> vertexShaderBlob = nullptr;
-	CompileShader(L"Shader.hlsl", "VS", "vs_5_0", vertexShaderBlob.GetAddressOf());
-	App::GetGraphicsDevice().CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), nullptr, vertexShader.GetAddressOf());
+	ATL::CComPtr<ID3D11VertexShader> vertexShader = nullptr;
+	ATL::CComPtr<ID3DBlob> vertexShaderBlob = nullptr;
+	CompileShader(L"Shader.hlsl", "VS", "vs_5_0", &vertexShaderBlob);
+	App::GetGraphicsDevice().CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), nullptr, &vertexShader);
 
-	Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader = nullptr;
-	Microsoft::WRL::ComPtr<ID3DBlob> pixelShaderBlob = nullptr;
-	CompileShader(L"Shader.hlsl", "PS", "ps_5_0", pixelShaderBlob.GetAddressOf());
-	App::GetGraphicsDevice().CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), nullptr, pixelShader.GetAddressOf());
+	ATL::CComPtr<ID3D11PixelShader> pixelShader = nullptr;
+	ATL::CComPtr<ID3DBlob> pixelShaderBlob = nullptr;
+	CompileShader(L"Shader.hlsl", "PS", "ps_5_0", &pixelShaderBlob);
+	App::GetGraphicsDevice().CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), nullptr, &pixelShader);
 
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout = nullptr;
+	ATL::CComPtr<ID3D11InputLayout> inputLayout = nullptr;
 	std::vector<D3D11_INPUT_ELEMENT_DESC> inputElementDesc
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
-	App::GetGraphicsDevice().CreateInputLayout(inputElementDesc.data(), inputElementDesc.size(), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), inputLayout.GetAddressOf());
+	App::GetGraphicsDevice().CreateInputLayout(inputElementDesc.data(), inputElementDesc.size(), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), &inputLayout);
 
-	Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer = nullptr;
+	ATL::CComPtr<ID3D11Buffer> constantBuffer = nullptr;
 	D3D11_BUFFER_DESC constantBufferDesc = {};
 	constantBufferDesc.ByteWidth = sizeof(Constant);
 	constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	constantBufferDesc.CPUAccessFlags = 0;
-	App::GetGraphicsDevice().CreateBuffer(&constantBufferDesc, nullptr, constantBuffer.GetAddressOf());
+	App::GetGraphicsDevice().CreateBuffer(&constantBufferDesc, nullptr, &constantBuffer);
 
 	Constant constant;
 	constant.world = DirectX::XMMatrixIdentity();
@@ -74,16 +74,16 @@ int Main()
 		angle += 0.01f;
 		constant.world = DirectX::XMMatrixRotationY(angle);
 
-		App::GetGraphicsContext().UpdateSubresource(constantBuffer.Get(), 0, nullptr, &constant, 0, 0);
-		App::GetGraphicsContext().VSSetConstantBuffers(0, 1, constantBuffer.GetAddressOf());
+		App::GetGraphicsContext().UpdateSubresource(constantBuffer, 0, nullptr, &constant, 0, 0);
+		App::GetGraphicsContext().VSSetConstantBuffers(0, 1, &constantBuffer.p);
 
 		UINT stride = sizeof(Vertex);
 		UINT offset = 0;
-		App::GetGraphicsContext().IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+		App::GetGraphicsContext().IASetVertexBuffers(0, 1, &vertexBuffer.p, &stride, &offset);
 
-		App::GetGraphicsContext().VSSetShader(vertexShader.Get(), nullptr, 0);
-		App::GetGraphicsContext().PSSetShader(pixelShader.Get(), nullptr, 0);
-		App::GetGraphicsContext().IASetInputLayout(inputLayout.Get());
+		App::GetGraphicsContext().VSSetShader(vertexShader, nullptr, 0);
+		App::GetGraphicsContext().PSSetShader(pixelShader, nullptr, 0);
+		App::GetGraphicsContext().IASetInputLayout(inputLayout);
 
 		App::GetGraphicsContext().Draw(vertices.size(), 0);
 	}
@@ -98,7 +98,7 @@ void CompileShader(const wchar_t* const filePath, const char* const entryPoint, 
 	flags |= D3DCOMPILE_DEBUG;
 #endif
 
-	Microsoft::WRL::ComPtr<ID3DBlob> errorBlob = nullptr;
+	ATL::CComPtr<ID3DBlob> errorBlob = nullptr;
 	D3DCompileFromFile(filePath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, entryPoint, shaderModel, flags, 0, out, &errorBlob);
 
 	if (errorBlob != nullptr)
