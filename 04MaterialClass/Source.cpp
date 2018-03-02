@@ -42,7 +42,6 @@ int Main()
 	Material material(L"Shader.hlsl");
 	material.SetBuffer(&constant, sizeof(constant));
 
-	MSG message = {};
 	float angle = 0.0f;
 
 	while (App::Refresh())

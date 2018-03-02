@@ -110,7 +110,6 @@ int Main()
 	constant.view = DirectX::XMMatrixTranslation(0.0f, 0.0f, 5.0f);
 	constant.projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), App::GetWindowSize().x / (float)App::GetWindowSize().y, 0.1f, 100.0f);
 
-	MSG message = {};
 	float angle = 0.0f;
 
 	while (App::Refresh())
