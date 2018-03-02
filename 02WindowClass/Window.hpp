@@ -57,22 +57,17 @@ class Window
 	}
 	PUBLIC bool Update()
 	{
-		static MSG message = {};
+		MSG message = {};
 
-		while (message.message != WM_QUIT)
+		while (PeekMessageW(&message, nullptr, 0, 0, PM_REMOVE))
 		{
-			if (PeekMessageW(&message, nullptr, 0, 0, PM_REMOVE))
-			{
-				TranslateMessage(&message);
-				DispatchMessageW(&message);
-			}
-			else
-			{
-				return true;
-			}
+			if (message.message == WM_QUIT) return false;
+
+			TranslateMessage(&message);
+			DispatchMessageW(&message);
 		}
 
-		return false;
+		return true;
 	}
 	PRIVATE static LRESULT CALLBACK Proceed(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 	{

@@ -151,10 +151,12 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 	MSG message = {};
 	float angle = 0.0f;
 
-	while (message.message != WM_QUIT)
+	while (true)
 	{
 		if (PeekMessageW(&message, nullptr, 0, 0, PM_REMOVE))
 		{
+			if (message.message == WM_QUIT) break;
+
 			TranslateMessage(&message);
 			DispatchMessageW(&message);
 		}
