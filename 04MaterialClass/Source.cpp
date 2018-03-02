@@ -23,7 +23,7 @@ int Main()
 		{ DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f) },
 		{ DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f), DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f) },
 	};
-	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
+	ATL::CComPtr<ID3D11Buffer> vertexBuffer = nullptr;
 	D3D11_BUFFER_DESC vertexBufferDesc = {};
 	vertexBufferDesc.ByteWidth = sizeof(Vertex) * vertices.size();
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -32,7 +32,7 @@ int Main()
 	vertexBufferDesc.MiscFlags = 0;
 	D3D11_SUBRESOURCE_DATA vertexSubresourceData = {};
 	vertexSubresourceData.pSysMem = vertices.data();
-	App::GetGraphicsDevice().CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, vertexBuffer.GetAddressOf());
+	App::GetGraphicsDevice().CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, &vertexBuffer);
 
 	Constant constant;
 	constant.world = DirectX::XMMatrixIdentity();
@@ -51,7 +51,7 @@ int Main()
 
 		UINT stride = sizeof(Vertex);
 		UINT offset = 0;
-		App::GetGraphicsContext().IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+		App::GetGraphicsContext().IASetVertexBuffers(0, 1, &vertexBuffer.p, &stride, &offset);
 
 		material.Attach();
 
