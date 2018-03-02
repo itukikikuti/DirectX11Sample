@@ -43,7 +43,7 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 	windowClass.lpszClassName = NAME;
 	RegisterClassW(&windowClass);
 
-	HWND hwindow = CreateWindowW(NAME, NAME, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 0, 0, nullptr, nullptr, hinstance, nullptr);
+	HWND hwindow = CreateWindowW(NAME, NAME, WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, hinstance, nullptr);
 
 	RECT windowRect = {};
 	RECT clientRect = {};

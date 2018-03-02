@@ -24,7 +24,7 @@ class Window
 		windowClass.lpszClassName = App::NAME;
 		RegisterClassW(&windowClass);
 
-		handle = CreateWindowW(App::NAME, App::NAME, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 0, 0, nullptr, nullptr, instance, nullptr);
+		handle = CreateWindowW(App::NAME, App::NAME, WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, instance, nullptr);
 
 		SetSize(1280, 720);
 
