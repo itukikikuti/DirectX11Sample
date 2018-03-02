@@ -10,6 +10,7 @@ class Material
 	{
 		Load(filePath);
 	}
+	PUBLIC ~Material() {}
 	PROTECTED void Create(const wchar_t* const filePath)
 	{
 		vertexShader.Reset();
