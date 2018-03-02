@@ -27,9 +27,4 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Shader.hlsl">
-      <Filter>ソース ファイル</Filter>
-    </FxCompile>
-  </ItemGroup>
 </Project>
