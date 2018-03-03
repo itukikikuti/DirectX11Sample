@@ -9,7 +9,9 @@ class Graphics
 	{
 		Initialize();
 	}
-	PUBLIC ~Graphics() {}
+	PUBLIC ~Graphics()
+	{
+	}
 	PRIVATE void Initialize()
 	{
 		std::vector<D3D_FEATURE_LEVEL> featureLevels

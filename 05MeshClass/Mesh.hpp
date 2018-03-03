@@ -24,7 +24,9 @@ class Mesh
 		CreateTriangle();
 		Apply();
 	}
-	PUBLIC ~Mesh() {}
+	PUBLIC ~Mesh()
+	{
+	}
 	PROTECTED void Initialize()
 	{
 		material = Material(L"Shader.hlsl");

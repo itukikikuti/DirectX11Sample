@@ -6,12 +6,16 @@ class Material
 	PROTECTED ATL::CComPtr<ID3D11PixelShader> pixelShader = nullptr;
 	PROTECTED ATL::CComPtr<ID3D11InputLayout> inputLayout = nullptr;
 
-	PUBLIC Material() {}
+	PUBLIC Material()
+	{
+	}
 	PUBLIC Material(const wchar_t* const filePath)
 	{
 		Load(filePath);
 	}
-	PUBLIC ~Material() {}
+	PUBLIC ~Material()
+	{
+	}
 	PROTECTED void Create(const wchar_t* const filePath)
 	{
 		vertexShader.Release();

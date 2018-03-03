@@ -6,7 +6,9 @@ class Window
 	{
 		Initialize();
 	}
-	PUBLIC ~Window() {}
+	PUBLIC ~Window()
+	{
+	}
 	PRIVATE void Initialize()
 	{
 		HINSTANCE instance = GetModuleHandleW(nullptr);
