@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "05MeshClass", "05MeshClass\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "00", "00\00.vcxproj", "{DD9BCA99-1C36-4FA5-800A-55C702B4E797}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "06Float3Class", "06Float3Class\06Float3Class.vcxproj", "{D1EC6B1D-960D-4057-BE95-5DB5F010E704}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -71,6 +73,14 @@ Global
 		{DD9BCA99-1C36-4FA5-800A-55C702B4E797}.Release|x64.Build.0 = Release|x64
 		{DD9BCA99-1C36-4FA5-800A-55C702B4E797}.Release|x86.ActiveCfg = Release|Win32
 		{DD9BCA99-1C36-4FA5-800A-55C702B4E797}.Release|x86.Build.0 = Release|Win32
+		{D1EC6B1D-960D-4057-BE95-5DB5F010E704}.Debug|x64.ActiveCfg = Debug|x64
+		{D1EC6B1D-960D-4057-BE95-5DB5F010E704}.Debug|x64.Build.0 = Debug|x64
+		{D1EC6B1D-960D-4057-BE95-5DB5F010E704}.Debug|x86.ActiveCfg = Debug|Win32
+		{D1EC6B1D-960D-4057-BE95-5DB5F010E704}.Debug|x86.Build.0 = Debug|Win32
+		{D1EC6B1D-960D-4057-BE95-5DB5F010E704}.Release|x64.ActiveCfg = Release|x64
+		{D1EC6B1D-960D-4057-BE95-5DB5F010E704}.Release|x64.Build.0 = Release|x64
+		{D1EC6B1D-960D-4057-BE95-5DB5F010E704}.Release|x86.ActiveCfg = Release|Win32
+		{D1EC6B1D-960D-4057-BE95-5DB5F010E704}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
