@@ -52,7 +52,7 @@ class Mesh
 		indices.push_back(indexOffset + 2);
 		indices.push_back(indexOffset + 1);
 	}
-	PUBLIC void CreateCube(Float2 size = Float2(0.5f, 0.5f), Float3 offset = Float3(0.0f, 0.0f, 0.0f), bool shouldClear = true)
+	PUBLIC void CreateCube(Float2 size = Float2(0.5f, 0.5f), bool shouldClear = true)
 	{
 		if (shouldClear)
 		{
