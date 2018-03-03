@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "07DrawPlane", "07DrawPlane\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "06FloatStructure", "06FloatStructure\06FloatStructure.vcxproj", "{2039C7A6-15B7-44FC-9097-06E0C73F7AED}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "08DrawCube", "08DrawCube\08DrawCube.vcxproj", "{7976A35A-F00E-4636-A454-1DA44936311B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -91,6 +93,14 @@ Global
 		{2039C7A6-15B7-44FC-9097-06E0C73F7AED}.Release|x64.Build.0 = Release|x64
 		{2039C7A6-15B7-44FC-9097-06E0C73F7AED}.Release|x86.ActiveCfg = Release|Win32
 		{2039C7A6-15B7-44FC-9097-06E0C73F7AED}.Release|x86.Build.0 = Release|Win32
+		{7976A35A-F00E-4636-A454-1DA44936311B}.Debug|x64.ActiveCfg = Debug|x64
+		{7976A35A-F00E-4636-A454-1DA44936311B}.Debug|x64.Build.0 = Debug|x64
+		{7976A35A-F00E-4636-A454-1DA44936311B}.Debug|x86.ActiveCfg = Debug|Win32
+		{7976A35A-F00E-4636-A454-1DA44936311B}.Debug|x86.Build.0 = Debug|Win32
+		{7976A35A-F00E-4636-A454-1DA44936311B}.Release|x64.ActiveCfg = Release|x64
+		{7976A35A-F00E-4636-A454-1DA44936311B}.Release|x64.Build.0 = Release|x64
+		{7976A35A-F00E-4636-A454-1DA44936311B}.Release|x86.ActiveCfg = Release|Win32
+		{7976A35A-F00E-4636-A454-1DA44936311B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
