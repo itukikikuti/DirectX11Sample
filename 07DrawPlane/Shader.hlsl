@@ -1,8 +1,8 @@
 cbuffer Constant : register(b0)
 {
-    matrix _world;
-    matrix _view;
-    matrix _projection;
+    matrix world;
+    matrix view;
+    matrix projection;
 };
 struct VSOutput
 {
@@ -12,9 +12,9 @@ struct VSOutput
 VSOutput VS(float4 position : POSITION, float3 color : COLOR)
 {
 	VSOutput output;
-    output.position = mul(_world, position);
-    output.position = mul(_view, output.position);
-	output.position = mul(_projection, output.position);
+    output.position = mul(position, world);
+    output.position = mul(output.position, view);
+	output.position = mul(output.position, projection);
 	output.color = color;
     return output;
 }

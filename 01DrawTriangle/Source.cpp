@@ -151,9 +151,18 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 	device->CreateBuffer(&constantBufferDesc, nullptr, &constantBuffer);
 
 	Constant constant;
-	constant.world = DirectX::XMMatrixIdentity();
-	constant.view = DirectX::XMMatrixTranslation(0.0f, 0.0f, 5.0f);
-	constant.projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+	constant.world = DirectX::XMMatrixTranspose
+	(
+		DirectX::XMMatrixIdentity()
+	);
+	constant.view = DirectX::XMMatrixTranspose
+	(
+		DirectX::XMMatrixTranslation(0.0f, 0.0f, 5.0f)
+	);
+	constant.projection = DirectX::XMMatrixTranspose
+	(
+		DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), WIDTH / (float)HEIGHT, 0.1f, 100.0f)
+	);
 
 	float angle = 0.0f;
 
@@ -171,7 +180,10 @@ int APIENTRY wWinMain(HINSTANCE hinstance, HINSTANCE, LPWSTR, int)
 		else
 		{
 			angle += 0.01f;
-			constant.world = DirectX::XMMatrixRotationY(angle);
+			constant.world = DirectX::XMMatrixTranspose
+			(
+				DirectX::XMMatrixRotationY(angle)
+			);
 
 			context->OMSetRenderTargets(1, &renderTargetView.p, nullptr);
 

@@ -56,9 +56,18 @@ class Mesh
 		static float angle = 0.0f;
 
 		angle += 0.01f;
-		constant.world = DirectX::XMMatrixRotationY(angle);
-		constant.view = DirectX::XMMatrixTranslation(0.0f, 0.0f, 5.0f);
-		constant.projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), App::GetWindowSize().x / (float)App::GetWindowSize().y, 0.1f, 100.0f);
+		constant.world = DirectX::XMMatrixTranspose
+		(
+			DirectX::XMMatrixRotationY(angle)
+		);
+		constant.view = DirectX::XMMatrixTranspose
+		(
+			DirectX::XMMatrixTranslation(0.0f, 0.0f, 5.0f)
+		);
+		constant.projection = DirectX::XMMatrixTranspose
+		(
+			DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), App::GetWindowSize().x / (float)App::GetWindowSize().y, 0.1f, 100.0f)
+		);
 
 		UINT stride = sizeof(Vertex);
 		UINT offset = 0;

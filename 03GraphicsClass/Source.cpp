@@ -63,16 +63,28 @@ int Main()
 	App::GetGraphicsDevice().CreateBuffer(&constantBufferDesc, nullptr, &constantBuffer);
 
 	Constant constant;
-	constant.world = DirectX::XMMatrixIdentity();
-	constant.view = DirectX::XMMatrixTranslation(0.0f, 0.0f, 5.0f);
-	constant.projection = DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), App::GetWindowSize().x / (float)App::GetWindowSize().y, 0.1f, 100.0f);
+	constant.world = DirectX::XMMatrixTranspose
+	(
+		DirectX::XMMatrixIdentity()
+	);
+	constant.view = DirectX::XMMatrixTranspose
+	(
+		DirectX::XMMatrixTranslation(0.0f, 0.0f, 5.0f)
+	);
+	constant.projection = DirectX::XMMatrixTranspose
+	(
+		DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), App::GetWindowSize().x / (float)App::GetWindowSize().y, 0.1f, 100.0f)
+	);
 
 	float angle = 0.0f;
 
 	while (App::Refresh())
 	{
 		angle += 0.01f;
-		constant.world = DirectX::XMMatrixRotationY(angle);
+		constant.world = DirectX::XMMatrixTranspose
+		(
+			DirectX::XMMatrixRotationY(angle)
+		);
 
 		App::GetGraphicsContext().UpdateSubresource(constantBuffer, 0, nullptr, &constant, 0, 0);
 		App::GetGraphicsContext().VSSetConstantBuffers(0, 1, &constantBuffer.p);
