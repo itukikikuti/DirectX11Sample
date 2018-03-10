@@ -13,7 +13,7 @@ using namespace std;
 using namespace ATL;
 using namespace DirectX;
 
-const wchar_t* NAME = L"01DrawTriangle";
+const wchar_t* NAME = L"DirectX11";
 const unsigned int WIDTH = 1280;
 const unsigned int HEIGHT = 720;
 
