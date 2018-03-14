@@ -6,16 +6,16 @@ cbuffer Constant : register(b0)
 };
 struct VSOutput
 {
-	float4 position : SV_POSITION;
-	float3 color : COLOR;
+    float4 position : SV_POSITION;
+    float3 color : COLOR;
 };
 VSOutput VS(float4 position : POSITION, float3 color : COLOR)
 {
-	VSOutput output;
+    VSOutput output;
     output.position = mul(position, world);
     output.position = mul(output.position, view);
-	output.position = mul(output.position, projection);
-	output.color = color;
+    output.position = mul(output.position, projection);
+    output.color = color;
     return output;
 }
 float4 PS(VSOutput pixel) : SV_TARGET
