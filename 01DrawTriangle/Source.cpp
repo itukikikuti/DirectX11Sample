@@ -18,314 +18,311 @@ const unsigned int WIDTH = 1280;
 const unsigned int HEIGHT = 720;
 
 LRESULT CALLBACK ProceedMessage(
-	HWND window,
-	UINT message,
-	WPARAM w,
-	LPARAM l
+    HWND window,
+    UINT message,
+    WPARAM wParam,
+    LPARAM lParam
 )
 {
-	if (message == WM_DESTROY)
-		PostQuitMessage(0);
+    if (message == WM_DESTROY)
+        PostQuitMessage(0);
 
-	return DefWindowProcW(window, message, w, l);
+    return DefWindowProcW(window, message, wParam, lParam);
 }
 
 void CompileShader(
-	const wchar_t* const filePath,
-	const char* const entryPoint,
-	const char* const shaderModel,
-	ID3DBlob** out)
+    const wchar_t* const filePath,
+    const char* const entryPoint,
+    const char* const shaderModel,
+    ID3DBlob** out
+)
 {
-	CComPtr<ID3DBlob> errorBlob = nullptr;
-	D3DCompileFromFile(
-		filePath,
-		nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE,
-		entryPoint,
-		shaderModel,
-		D3DCOMPILE_ENABLE_STRICTNESS,
-		0,
-		out,
-		&errorBlob
-	);
+    CComPtr<ID3DBlob> errorBlob = nullptr;
+    D3DCompileFromFile(
+        filePath,
+        nullptr,
+        D3D_COMPILE_STANDARD_FILE_INCLUDE,
+        entryPoint,
+        shaderModel,
+        D3DCOMPILE_ENABLE_STRICTNESS,
+        0,
+        out,
+        &errorBlob
+    );
 
-	if (errorBlob != nullptr)
-	{
-		OutputDebugStringA(
-			static_cast<char*>(errorBlob->GetBufferPointer())
-		);
-	}
+    if (errorBlob != nullptr)
+    {
+        OutputDebugStringA(
+            static_cast<char*>(errorBlob->GetBufferPointer())
+        );
+    }
 }
 
 struct Vertex
 {
-	XMFLOAT3 position;
-	XMFLOAT3 color;
+    XMFLOAT3 position;
+    XMFLOAT3 color;
 };
 
 struct Constant
 {
-	XMMATRIX world;
-	XMMATRIX view;
-	XMMATRIX projection;
+    XMMATRIX world;
+    XMMATRIX view;
+    XMMATRIX projection;
 };
 
 int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
 {
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	HCURSOR cursor = (HCURSOR)LoadImageW(
-		nullptr,
-		MAKEINTRESOURCEW(OCR_NORMAL),
-		IMAGE_CURSOR,
-		0,
-		0,
-		LR_DEFAULTSIZE | LR_SHARED
-	);
+    HCURSOR cursor = static_cast<HCURSOR>(LoadImageW(
+        nullptr,
+        MAKEINTRESOURCEW(OCR_NORMAL),
+        IMAGE_CURSOR,
+        0,
+        0,
+        LR_SHARED
+    ));
 
-	WNDCLASSW windowClass = {};
-	windowClass.lpfnWndProc = ProceedMessage;
-	windowClass.hInstance = instance;
-	windowClass.hCursor = cursor;
-	windowClass.lpszClassName = NAME;
+    WNDCLASSW windowClass = {};
+    windowClass.lpfnWndProc = ProceedMessage;
+    windowClass.hInstance = instance;
+    windowClass.hCursor = cursor;
+    windowClass.lpszClassName = NAME;
 
-	RegisterClassW(&windowClass);
+    RegisterClassW(&windowClass);
 
-	HWND window = CreateWindowW(
-		NAME,
-		NAME,
-		WS_OVERLAPPEDWINDOW,
-		0,
-		0,
-		0,
-		0,
-		nullptr,
-		nullptr,
-		instance,
-		nullptr
-	);
+    HWND window = CreateWindowW(
+        NAME,
+        NAME,
+        WS_OVERLAPPEDWINDOW,
+        0,
+        0,
+        0,
+        0,
+        nullptr,
+        nullptr,
+        instance,
+        nullptr
+    );
 
-	RECT windowRect = {};
-	RECT clientRect = {};
+    RECT windowRect = {};
+    RECT clientRect = {};
 
-	GetWindowRect(window, &windowRect);
-	GetClientRect(window, &clientRect);
-	
-	int w = (windowRect.right - windowRect.left) - (clientRect.right - clientRect.left) + WIDTH;
-	int h = (windowRect.bottom - windowRect.top) - (clientRect.bottom - clientRect.top) + HEIGHT;
-	int x = (GetSystemMetrics(SM_CXSCREEN) - w) / 2;
-	int y = (GetSystemMetrics(SM_CYSCREEN) - h) / 2;
-	
-	SetWindowPos(
-		window,
-		nullptr,
-		x,
-		y,
-		w,
-		h,
-		SWP_FRAMECHANGED
-	);
+    GetWindowRect(window, &windowRect);
+    GetClientRect(window, &clientRect);
 
-	ShowWindow(
-		window,
-		SW_SHOWNORMAL
-	);
+    int w = (windowRect.right - windowRect.left) - (clientRect.right - clientRect.left) + WIDTH;
+    int h = (windowRect.bottom - windowRect.top) - (clientRect.bottom - clientRect.top) + HEIGHT;
+    int x = (GetSystemMetrics(SM_CXSCREEN) - w) / 2;
+    int y = (GetSystemMetrics(SM_CYSCREEN) - h) / 2;
 
-	vector<D3D_FEATURE_LEVEL> featureLevels
-	{
-		D3D_FEATURE_LEVEL_11_0,
-		D3D_FEATURE_LEVEL_10_1,
-		D3D_FEATURE_LEVEL_10_0,
-	};
+    SetWindowPos(
+        window,
+        nullptr,
+        x,
+        y,
+        w,
+        h,
+        SWP_FRAMECHANGED
+    );
 
-	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
-	swapChainDesc.BufferDesc.Width = WIDTH;
-	swapChainDesc.BufferDesc.Height = HEIGHT;
-	swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
-	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-	swapChainDesc.SampleDesc.Count = 1;
-	swapChainDesc.SampleDesc.Quality = 0;
-	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.BufferCount = 1;
-	swapChainDesc.OutputWindow = window;
-	swapChainDesc.Windowed = true;
+    ShowWindow(window, SW_SHOWNORMAL);
 
-	CComPtr<ID3D11Device> device = nullptr;
-	CComPtr<IDXGISwapChain> swapChain = nullptr;
-	CComPtr<ID3D11DeviceContext> context = nullptr;
+    vector<D3D_FEATURE_LEVEL> featureLevels
+    {
+        D3D_FEATURE_LEVEL_11_0,
+        D3D_FEATURE_LEVEL_10_1,
+        D3D_FEATURE_LEVEL_10_0,
+    };
 
-	D3D11CreateDeviceAndSwapChain(
-		nullptr,
-		D3D_DRIVER_TYPE_HARDWARE,
-		nullptr,
-		0,
-		featureLevels.data(),
-		featureLevels.size(),
-		D3D11_SDK_VERSION,
-		&swapChainDesc,
-		&swapChain,
-		&device,
-		nullptr,
-		&context
-	);
+    DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
+    swapChainDesc.BufferDesc.Width = WIDTH;
+    swapChainDesc.BufferDesc.Height = HEIGHT;
+    swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+    swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+    swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+    swapChainDesc.SampleDesc.Count = 1;
+    swapChainDesc.SampleDesc.Quality = 0;
+    swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    swapChainDesc.BufferCount = 1;
+    swapChainDesc.OutputWindow = window;
+    swapChainDesc.Windowed = true;
 
-	context->IASetPrimitiveTopology(
-		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
-	);
+    CComPtr<ID3D11Device> device = nullptr;
+    CComPtr<IDXGISwapChain> swapChain = nullptr;
+    CComPtr<ID3D11DeviceContext> context = nullptr;
 
-	CComPtr<ID3D11Texture2D> renderTexture = nullptr;
+    D3D11CreateDeviceAndSwapChain(
+        nullptr,
+        D3D_DRIVER_TYPE_HARDWARE,
+        nullptr,
+        0,
+        featureLevels.data(),
+        featureLevels.size(),
+        D3D11_SDK_VERSION,
+        &swapChainDesc,
+        &swapChain,
+        &device,
+        nullptr,
+        &context
+    );
 
-	swapChain->GetBuffer(
-		0,
-		__uuidof(ID3D11Texture2D),
-		reinterpret_cast<void**>(&renderTexture)
-	);
+    context->IASetPrimitiveTopology(
+        D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
+    );
 
-	CComPtr<ID3D11RenderTargetView> renderTargetView = nullptr;
-	
-	device->CreateRenderTargetView(
-		renderTexture,
-		nullptr,
-		&renderTargetView
-	);
+    CComPtr<ID3D11Texture2D> renderTexture = nullptr;
 
-	D3D11_VIEWPORT viewPort = {};
-	viewPort.Width = WIDTH;
-	viewPort.Height = HEIGHT;
-	viewPort.MaxDepth = 1.0f;
-	
-	context->RSSetViewports(1, &viewPort);
+    swapChain->GetBuffer(
+        0,
+        __uuidof(ID3D11Texture2D),
+        reinterpret_cast<void**>(&renderTexture)
+    );
 
-	vector<Vertex> vertices
-	{
-		{ XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, 0.0f), XMFLOAT3(0.0f, 1.0f, 0.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
-	};
+    CComPtr<ID3D11RenderTargetView> renderTargetView = nullptr;
 
-	CComPtr<ID3D11Buffer> vertexBuffer = nullptr;
+    device->CreateRenderTargetView(
+        renderTexture,
+        nullptr,
+        &renderTargetView
+    );
 
-	D3D11_BUFFER_DESC vertexBufferDesc = {};
-	vertexBufferDesc.ByteWidth = sizeof(Vertex) * vertices.size();
-	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    D3D11_VIEWPORT viewPort = {};
+    viewPort.Width = WIDTH;
+    viewPort.Height = HEIGHT;
+    viewPort.MaxDepth = 1.0f;
 
-	D3D11_SUBRESOURCE_DATA vertexSubresourceData = {};
-	vertexSubresourceData.pSysMem = vertices.data();
+    context->RSSetViewports(1, &viewPort);
 
-	device->CreateBuffer(
-		&vertexBufferDesc,
-		&vertexSubresourceData,
-		&vertexBuffer
-	);
+    vector<Vertex> vertices
+    {
+        { XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f) },
+        { XMFLOAT3(1.0f, -1.0f, 0.0f), XMFLOAT3(0.0f, 1.0f, 0.0f) },
+        { XMFLOAT3(-1.0f, -1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
+    };
 
-	CComPtr<ID3D11VertexShader> vertexShader = nullptr;
-	CComPtr<ID3DBlob> vertexShaderBlob = nullptr;
+    CComPtr<ID3D11Buffer> vertexBuffer = nullptr;
 
-	CompileShader(L"Shader.hlsl", "VS", "vs_5_0", &vertexShaderBlob);
+    D3D11_BUFFER_DESC vertexBufferDesc = {};
+    vertexBufferDesc.ByteWidth = sizeof(Vertex) * vertices.size();
+    vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+    vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
-	device->CreateVertexShader(
-		vertexShaderBlob->GetBufferPointer(),
-		vertexShaderBlob->GetBufferSize(),
-		nullptr,
-		&vertexShader
-	);
+    D3D11_SUBRESOURCE_DATA vertexSubresourceData = {};
+    vertexSubresourceData.pSysMem = vertices.data();
 
-	CComPtr<ID3D11PixelShader> pixelShader = nullptr;
-	CComPtr<ID3DBlob> pixelShaderBlob = nullptr;
+    device->CreateBuffer(
+        &vertexBufferDesc,
+        &vertexSubresourceData,
+        &vertexBuffer
+    );
 
-	CompileShader(L"Shader.hlsl", "PS", "ps_5_0", &pixelShaderBlob);
+    CComPtr<ID3D11VertexShader> vertexShader = nullptr;
+    CComPtr<ID3DBlob> vertexShaderBlob = nullptr;
 
-	device->CreatePixelShader(
-		pixelShaderBlob->GetBufferPointer(),
-		pixelShaderBlob->GetBufferSize(),
-		nullptr,
-		&pixelShader
-	);
+    CompileShader(L"Shader.hlsl", "VS", "vs_5_0", &vertexShaderBlob);
 
-	CComPtr<ID3D11InputLayout> inputLayout = nullptr;
+    device->CreateVertexShader(
+        vertexShaderBlob->GetBufferPointer(),
+        vertexShaderBlob->GetBufferSize(),
+        nullptr,
+        &vertexShader
+    );
 
-	vector<D3D11_INPUT_ELEMENT_DESC> inputElementDesc
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
+    CComPtr<ID3D11PixelShader> pixelShader = nullptr;
+    CComPtr<ID3DBlob> pixelShaderBlob = nullptr;
 
-	device->CreateInputLayout(
-		inputElementDesc.data(),
-		inputElementDesc.size(),
-		vertexShaderBlob->GetBufferPointer(),
-		vertexShaderBlob->GetBufferSize(),
-		&inputLayout
-	);
+    CompileShader(L"Shader.hlsl", "PS", "ps_5_0", &pixelShaderBlob);
 
-	CComPtr<ID3D11Buffer> constantBuffer = nullptr;
+    device->CreatePixelShader(
+        pixelShaderBlob->GetBufferPointer(),
+        pixelShaderBlob->GetBufferSize(),
+        nullptr,
+        &pixelShader
+    );
 
-	D3D11_BUFFER_DESC constantBufferDesc = {};
-	constantBufferDesc.ByteWidth = sizeof(Constant);
-	constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    CComPtr<ID3D11InputLayout> inputLayout = nullptr;
 
-	device->CreateBuffer(&constantBufferDesc, nullptr, &constantBuffer);
+    vector<D3D11_INPUT_ELEMENT_DESC> inputElementDesc
+    {
+        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+    };
 
-	Constant constant;
-	constant.world = XMMatrixTranspose(
-		XMMatrixIdentity()
-	);
-	constant.view = XMMatrixTranspose(
-		XMMatrixTranslation(0.0f, 0.0f, 5.0f)
-	);
-	constant.projection = XMMatrixTranspose(
-		XMMatrixPerspectiveFovLH(
-			XMConvertToRadians(60.0f),
-			WIDTH / (float)HEIGHT,
-			0.1f,
-			100.0f
-		)
-	);
+    device->CreateInputLayout(
+        inputElementDesc.data(),
+        inputElementDesc.size(),
+        vertexShaderBlob->GetBufferPointer(),
+        vertexShaderBlob->GetBufferSize(),
+        &inputLayout
+    );
 
-	float angle = 0.0f;
+    CComPtr<ID3D11Buffer> constantBuffer = nullptr;
 
-	while (true)
-	{
-		MSG message = {};
+    D3D11_BUFFER_DESC constantBufferDesc = {};
+    constantBufferDesc.ByteWidth = sizeof(Constant);
+    constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+    constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
-		if (PeekMessageW(&message, nullptr, 0, 0, PM_REMOVE))
-		{
-			if (message.message == WM_QUIT) break;
+    device->CreateBuffer(&constantBufferDesc, nullptr, &constantBuffer);
 
-			TranslateMessage(&message);
-			DispatchMessageW(&message);
-		}
-		else
-		{
-			angle += 0.01f;
-			constant.world = XMMatrixTranspose(
-				XMMatrixRotationY(angle)
-			);
+    Constant constant;
+    constant.view = XMMatrixTranspose(
+        XMMatrixTranslation(0.0f, 0.0f, 5.0f)
+    );
 
-			context->OMSetRenderTargets(1, &renderTargetView.p, nullptr);
+    constant.projection = XMMatrixTranspose(
+        XMMatrixPerspectiveFovLH(
+            XMConvertToRadians(60.0f),
+            (float)WIDTH / HEIGHT,
+            0.1f,
+            100.0f
+        )
+    );
 
-			context->UpdateSubresource(constantBuffer, 0, nullptr, &constant, 0, 0);
-			context->VSSetConstantBuffers(0, 1, &constantBuffer.p);
+    float angle = 0.0f;
 
-			UINT stride = sizeof(Vertex);
-			UINT offset = 0;
-			context->IASetVertexBuffers(0, 1, &vertexBuffer.p, &stride, &offset);
+    while (true)
+    {
+        MSG message = {};
 
-			context->VSSetShader(vertexShader, nullptr, 0);
-			context->PSSetShader(pixelShader, nullptr, 0);
-			context->IASetInputLayout(inputLayout);
+        if (PeekMessageW(&message, nullptr, 0, 0, PM_REMOVE))
+        {
+            if (message.message == WM_QUIT)
+                break;
 
-			static float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-			context->ClearRenderTargetView(renderTargetView, color);
+            TranslateMessage(&message);
+            DispatchMessageW(&message);
+        }
+        else
+        {
+            angle += 0.01f;
+            constant.world = XMMatrixTranspose(
+                XMMatrixRotationY(angle)
+            );
 
-			context->Draw(vertices.size(), 0);
+            context->OMSetRenderTargets(1, &renderTargetView.p, nullptr);
 
-			swapChain->Present(1, 0);
-		}
-	}
+            context->UpdateSubresource(constantBuffer, 0, nullptr, &constant, 0, 0);
+            context->VSSetConstantBuffers(0, 1, &constantBuffer.p);
 
-	return 0;
+            UINT stride = sizeof(Vertex);
+            UINT offset = 0;
+            context->IASetVertexBuffers(0, 1, &vertexBuffer.p, &stride, &offset);
+
+            context->VSSetShader(vertexShader, nullptr, 0);
+            context->PSSetShader(pixelShader, nullptr, 0);
+            context->IASetInputLayout(inputLayout);
+
+            static float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+            context->ClearRenderTargetView(renderTargetView, color);
+
+            context->Draw(vertices.size(), 0);
+
+            swapChain->Present(1, 0);
+        }
+    }
+
+    return 0;
 }
