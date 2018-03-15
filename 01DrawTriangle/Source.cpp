@@ -17,12 +17,7 @@ const wchar_t* NAME = L"DirectX11";
 const unsigned int WIDTH = 1280;
 const unsigned int HEIGHT = 720;
 
-LRESULT CALLBACK ProceedMessage(
-    HWND window,
-    UINT message,
-    WPARAM wParam,
-    LPARAM lParam
-)
+LRESULT CALLBACK ProceedMessage(HWND window, UINT message, WPARAM wParam, LPARAM lParam)
 {
     if (message == WM_DESTROY)
         PostQuitMessage(0);
@@ -30,31 +25,14 @@ LRESULT CALLBACK ProceedMessage(
     return DefWindowProcW(window, message, wParam, lParam);
 }
 
-void CompileShader(
-    const wchar_t* const filePath,
-    const char* const entryPoint,
-    const char* const shaderModel,
-    ID3DBlob** out
-)
+void CompileShader(const wchar_t* const filePath, const char* const entryPoint, const char* const shaderModel, ID3DBlob** out)
 {
     CComPtr<ID3DBlob> errorBlob = nullptr;
-    D3DCompileFromFile(
-        filePath,
-        nullptr,
-        D3D_COMPILE_STANDARD_FILE_INCLUDE,
-        entryPoint,
-        shaderModel,
-        D3DCOMPILE_ENABLE_STRICTNESS,
-        0,
-        out,
-        &errorBlob
-    );
+    D3DCompileFromFile(filePath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, entryPoint, shaderModel, D3DCOMPILE_ENABLE_STRICTNESS, 0, out, &errorBlob);
 
     if (errorBlob != nullptr)
     {
-        OutputDebugStringA(
-            static_cast<char*>(errorBlob->GetBufferPointer())
-        );
+        OutputDebugStringA(static_cast<char*>(errorBlob->GetBufferPointer()));
     }
 }
 
@@ -75,40 +53,19 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
 {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-    HCURSOR cursor = static_cast<HCURSOR>(LoadImageW(
-        nullptr,
-        MAKEINTRESOURCEW(OCR_NORMAL),
-        IMAGE_CURSOR,
-        0,
-        0,
-        LR_SHARED
-    ));
+    HCURSOR cursor = static_cast<HCURSOR>(LoadImageW(nullptr, MAKEINTRESOURCEW(OCR_NORMAL), IMAGE_CURSOR, 0, 0, LR_SHARED));
 
     WNDCLASSW windowClass = {};
     windowClass.lpfnWndProc = ProceedMessage;
     windowClass.hInstance = instance;
     windowClass.hCursor = cursor;
     windowClass.lpszClassName = NAME;
-
     RegisterClassW(&windowClass);
 
-    HWND window = CreateWindowW(
-        NAME,
-        NAME,
-        WS_OVERLAPPEDWINDOW,
-        0,
-        0,
-        0,
-        0,
-        nullptr,
-        nullptr,
-        instance,
-        nullptr
-    );
+    HWND window = CreateWindowW(NAME, NAME, WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, instance, nullptr);
 
     RECT windowRect = {};
     RECT clientRect = {};
-
     GetWindowRect(window, &windowRect);
     GetClientRect(window, &clientRect);
 
@@ -116,16 +73,7 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
     int h = (windowRect.bottom - windowRect.top) - (clientRect.bottom - clientRect.top) + HEIGHT;
     int x = (GetSystemMetrics(SM_CXSCREEN) - w) / 2;
     int y = (GetSystemMetrics(SM_CYSCREEN) - h) / 2;
-
-    SetWindowPos(
-        window,
-        nullptr,
-        x,
-        y,
-        w,
-        h,
-        SWP_FRAMECHANGED
-    );
+    SetWindowPos(window, nullptr, x, y, w, h, SWP_FRAMECHANGED);
 
     ShowWindow(window, SW_SHOWNORMAL);
 
@@ -152,47 +100,20 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
     CComPtr<ID3D11Device> device = nullptr;
     CComPtr<IDXGISwapChain> swapChain = nullptr;
     CComPtr<ID3D11DeviceContext> context = nullptr;
+    D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, featureLevels.data(), featureLevels.size(), D3D11_SDK_VERSION, &swapChainDesc, &swapChain, &device, nullptr, &context);
 
-    D3D11CreateDeviceAndSwapChain(
-        nullptr,
-        D3D_DRIVER_TYPE_HARDWARE,
-        nullptr,
-        0,
-        featureLevels.data(),
-        featureLevels.size(),
-        D3D11_SDK_VERSION,
-        &swapChainDesc,
-        &swapChain,
-        &device,
-        nullptr,
-        &context
-    );
-
-    context->IASetPrimitiveTopology(
-        D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
-    );
+    context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     CComPtr<ID3D11Texture2D> renderTexture = nullptr;
-
-    swapChain->GetBuffer(
-        0,
-        __uuidof(ID3D11Texture2D),
-        reinterpret_cast<void**>(&renderTexture)
-    );
+    swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&renderTexture));
 
     CComPtr<ID3D11RenderTargetView> renderTargetView = nullptr;
-
-    device->CreateRenderTargetView(
-        renderTexture,
-        nullptr,
-        &renderTargetView
-    );
+    device->CreateRenderTargetView(renderTexture, nullptr, &renderTargetView);
 
     D3D11_VIEWPORT viewPort = {};
     viewPort.Width = WIDTH;
     viewPort.Height = HEIGHT;
     viewPort.MaxDepth = 1.0f;
-
     context->RSSetViewports(1, &viewPort);
 
     vector<Vertex> vertices
@@ -202,8 +123,6 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
         { XMFLOAT3(-1.0f, -1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
     };
 
-    CComPtr<ID3D11Buffer> vertexBuffer = nullptr;
-
     D3D11_BUFFER_DESC vertexBufferDesc = {};
     vertexBufferDesc.ByteWidth = sizeof(Vertex) * vertices.size();
     vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -212,37 +131,20 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
     D3D11_SUBRESOURCE_DATA vertexSubresourceData = {};
     vertexSubresourceData.pSysMem = vertices.data();
 
-    device->CreateBuffer(
-        &vertexBufferDesc,
-        &vertexSubresourceData,
-        &vertexBuffer
-    );
+    CComPtr<ID3D11Buffer> vertexBuffer = nullptr;
+    device->CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, &vertexBuffer);
 
-    CComPtr<ID3D11VertexShader> vertexShader = nullptr;
     CComPtr<ID3DBlob> vertexShaderBlob = nullptr;
-
     CompileShader(L"Shader.hlsl", "VS", "vs_5_0", &vertexShaderBlob);
 
-    device->CreateVertexShader(
-        vertexShaderBlob->GetBufferPointer(),
-        vertexShaderBlob->GetBufferSize(),
-        nullptr,
-        &vertexShader
-    );
+    CComPtr<ID3D11VertexShader> vertexShader = nullptr;
+    device->CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), nullptr, &vertexShader);
 
-    CComPtr<ID3D11PixelShader> pixelShader = nullptr;
     CComPtr<ID3DBlob> pixelShaderBlob = nullptr;
-
     CompileShader(L"Shader.hlsl", "PS", "ps_5_0", &pixelShaderBlob);
 
-    device->CreatePixelShader(
-        pixelShaderBlob->GetBufferPointer(),
-        pixelShaderBlob->GetBufferSize(),
-        nullptr,
-        &pixelShader
-    );
-
-    CComPtr<ID3D11InputLayout> inputLayout = nullptr;
+    CComPtr<ID3D11PixelShader> pixelShader = nullptr;
+    device->CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), nullptr, &pixelShader);
 
     vector<D3D11_INPUT_ELEMENT_DESC> inputElementDesc
     {
@@ -250,35 +152,22 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
         { "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
 
-    device->CreateInputLayout(
-        inputElementDesc.data(),
-        inputElementDesc.size(),
-        vertexShaderBlob->GetBufferPointer(),
-        vertexShaderBlob->GetBufferSize(),
-        &inputLayout
-    );
-
-    CComPtr<ID3D11Buffer> constantBuffer = nullptr;
+    CComPtr<ID3D11InputLayout> inputLayout = nullptr;
+    device->CreateInputLayout(inputElementDesc.data(), inputElementDesc.size(), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), &inputLayout);
 
     D3D11_BUFFER_DESC constantBufferDesc = {};
     constantBufferDesc.ByteWidth = sizeof(Constant);
     constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
     constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-
+    CComPtr<ID3D11Buffer> constantBuffer = nullptr;
     device->CreateBuffer(&constantBufferDesc, nullptr, &constantBuffer);
 
     Constant constant;
     constant.view = XMMatrixTranspose(
         XMMatrixTranslation(0.0f, 0.0f, 5.0f)
     );
-
     constant.projection = XMMatrixTranspose(
-        XMMatrixPerspectiveFovLH(
-            XMConvertToRadians(60.0f),
-            (float)WIDTH / HEIGHT,
-            0.1f,
-            100.0f
-        )
+        XMMatrixPerspectiveFovLH(XMConvertToRadians(60.0f), (float)WIDTH / HEIGHT, 0.1f, 100.0f)
     );
 
     float angle = 0.0f;

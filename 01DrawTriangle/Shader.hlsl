@@ -4,21 +4,26 @@ cbuffer Constant : register(b0)
     matrix view;
     matrix projection;
 };
-struct VSOutput
+struct Vertex
+{
+    float4 position : POSITION;
+    float3 color : COLOR;
+};
+struct Pixel
 {
     float4 position : SV_POSITION;
     float3 color : COLOR;
 };
-VSOutput VS(float4 position : POSITION, float3 color : COLOR)
+Pixel VS(Vertex vertex)
 {
-    VSOutput output;
-    output.position = mul(position, world);
+    Pixel output;
+    output.position = mul(vertex.position, world);
     output.position = mul(output.position, view);
     output.position = mul(output.position, projection);
-    output.color = color;
+    output.color = vertex.color;
     return output;
 }
-float4 PS(VSOutput pixel) : SV_TARGET
+float4 PS(Pixel pixel) : SV_TARGET
 {
     return float4(pixel.color, 1);
 }
