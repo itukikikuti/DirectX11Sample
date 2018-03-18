@@ -89,7 +89,7 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
     swapChainDesc.BufferDesc.Height = HEIGHT;
     swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
     swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-    swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+    swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     swapChainDesc.SampleDesc.Count = 1;
     swapChainDesc.SampleDesc.Quality = 0;
     swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
@@ -159,6 +159,7 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
     constantBufferDesc.ByteWidth = sizeof(Constant);
     constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
     constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+
     CComPtr<ID3D11Buffer> constantBuffer = nullptr;
     device->CreateBuffer(&constantBufferDesc, nullptr, &constantBuffer);
 
