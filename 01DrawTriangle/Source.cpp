@@ -27,12 +27,12 @@ LRESULT CALLBACK ProceedMessage(HWND window, UINT message, WPARAM wParam, LPARAM
 
 void CompileShader(const wchar_t* const filePath, const char* const entryPoint, const char* const shaderModel, ID3DBlob** out)
 {
-    CComPtr<ID3DBlob> errorBlob = nullptr;
-    D3DCompileFromFile(filePath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, entryPoint, shaderModel, D3DCOMPILE_ENABLE_STRICTNESS, 0, out, &errorBlob);
+    CComPtr<ID3DBlob> error = nullptr;
+    D3DCompileFromFile(filePath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, entryPoint, shaderModel, D3DCOMPILE_ENABLE_STRICTNESS, 0, out, &error);
 
-    if (errorBlob != nullptr)
+    if (error != nullptr)
     {
-        OutputDebugStringA(static_cast<char*>(errorBlob->GetBufferPointer()));
+        OutputDebugStringA(static_cast<char*>(error->GetBufferPointer()));
     }
 }
 
