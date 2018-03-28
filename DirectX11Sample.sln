@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "02Class", "02Class\02Class.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "03DrawCube", "03DrawCube\03DrawCube.vcxproj", "{C0DC91B4-3BEE-437A-A420-EE2FA2D2DE7A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "04Shading", "04Shading\04Shading.vcxproj", "{94CF694E-C190-4CE4-8556-EE1FD771B558}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -101,6 +103,14 @@ Global
 		{C0DC91B4-3BEE-437A-A420-EE2FA2D2DE7A}.Release|x64.Build.0 = Release|x64
 		{C0DC91B4-3BEE-437A-A420-EE2FA2D2DE7A}.Release|x86.ActiveCfg = Release|Win32
 		{C0DC91B4-3BEE-437A-A420-EE2FA2D2DE7A}.Release|x86.Build.0 = Release|Win32
+		{94CF694E-C190-4CE4-8556-EE1FD771B558}.Debug|x64.ActiveCfg = Debug|x64
+		{94CF694E-C190-4CE4-8556-EE1FD771B558}.Debug|x64.Build.0 = Debug|x64
+		{94CF694E-C190-4CE4-8556-EE1FD771B558}.Debug|x86.ActiveCfg = Debug|Win32
+		{94CF694E-C190-4CE4-8556-EE1FD771B558}.Debug|x86.Build.0 = Debug|Win32
+		{94CF694E-C190-4CE4-8556-EE1FD771B558}.Release|x64.ActiveCfg = Release|x64
+		{94CF694E-C190-4CE4-8556-EE1FD771B558}.Release|x64.Build.0 = Release|x64
+		{94CF694E-C190-4CE4-8556-EE1FD771B558}.Release|x86.ActiveCfg = Release|Win32
+		{94CF694E-C190-4CE4-8556-EE1FD771B558}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
