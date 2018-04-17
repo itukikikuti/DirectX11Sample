@@ -118,6 +118,7 @@
     <ClInclude Include="Material.hpp" />
     <ClInclude Include="Mesh.hpp" />
     <ClInclude Include="Texture.hpp" />
+    <ClInclude Include="Timer.hpp" />
     <ClInclude Include="Utility.hpp" />
     <ClInclude Include="Window.hpp" />
   </ItemGroup>

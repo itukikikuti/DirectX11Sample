@@ -24,12 +24,14 @@ public:
 #include "Window.hpp"
 #include "Graphics.hpp"
 #include "Input.hpp"
+#include "Timer.hpp"
 
 	App() = delete;
 	static bool Refresh()
 	{
 		GetGraphics().Update();
         GetInput().Update();
+        GetTimer().Update();
 		return GetWindow().Update();
 	}
     static void Initialize()
@@ -91,6 +93,18 @@ public:
     {
         GetInput().SetShowCursor(isShowCursor);
     }
+    static float GetTime()
+    {
+        return GetTimer().GetTime();
+    }
+    static float GetDeltaTime()
+    {
+        return GetTimer().GetDeltaTime();
+    }
+    static int GetFrameRate()
+    {
+        return GetTimer().GetFrameRate();
+    }
 
 private:
 	static Window& GetWindow()
@@ -107,6 +121,11 @@ private:
     {
         static std::unique_ptr<Input> input(new Input());
         return *input.get();
+    }
+    static Timer& GetTimer()
+    {
+        static std::unique_ptr<Timer> timer(new Timer());
+        return *timer.get();
     }
 };
 

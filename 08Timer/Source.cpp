@@ -20,14 +20,16 @@ int MAIN()
 
         App::SetMousePosition(0.0f, 0.0f);
 
-        mesh.angles.y += 0.01f;
+        if (App::GetKey(VK_SPACE))
+            Sleep(100);
+
+        mesh.angles.y += App::GetDeltaTime();
 
         mesh.position.z = -1.0f;
         mesh.Draw();
 
         mesh.position.z = 1.0f;
         mesh.Draw();
-
     }
 
     return 0;
