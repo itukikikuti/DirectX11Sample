@@ -13,6 +13,30 @@ public:
     ~Material()
     {
     }
+    void Create(const std::string& source)
+    {
+        ATL::CComPtr<ID3DBlob> vertexShaderBlob = nullptr;
+        CompileShader(source, "VS", "vs_5_0", &vertexShaderBlob);
+
+        vertexShader.Release();
+        App::GetGraphicsDevice().CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), nullptr, &vertexShader);
+
+        ATL::CComPtr<ID3DBlob> pixelShaderBlob = nullptr;
+        CompileShader(source, "PS", "ps_5_0", &pixelShaderBlob);
+
+        pixelShader.Release();
+        App::GetGraphicsDevice().CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), nullptr, &pixelShader);
+
+        std::vector<D3D11_INPUT_ELEMENT_DESC> inputElementDesc
+        {
+            { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+            { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+            { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        };
+
+        inputLayout.Release();
+        App::GetGraphicsDevice().CreateInputLayout(inputElementDesc.data(), (UINT)inputElementDesc.size(), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), &inputLayout);
+    }
     void SetBuffer(void* cbuffer, UINT size)
     {
         buffer = cbuffer;
@@ -72,30 +96,6 @@ private:
         {
             textures[i] = nullptr;
         }
-    }
-    void Create(const std::string& source)
-    {
-        ATL::CComPtr<ID3DBlob> vertexShaderBlob = nullptr;
-        CompileShader(source, "VS", "vs_5_0", &vertexShaderBlob);
-
-        vertexShader.Release();
-        App::GetGraphicsDevice().CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), nullptr, &vertexShader);
-
-        ATL::CComPtr<ID3DBlob> pixelShaderBlob = nullptr;
-        CompileShader(source, "PS", "ps_5_0", &pixelShaderBlob);
-
-        pixelShader.Release();
-        App::GetGraphicsDevice().CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), nullptr, &pixelShader);
-
-        std::vector<D3D11_INPUT_ELEMENT_DESC> inputElementDesc
-        {
-            { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-            { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-            { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        };
-
-        inputLayout.Release();
-        App::GetGraphicsDevice().CreateInputLayout(inputElementDesc.data(), (UINT)inputElementDesc.size(), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), &inputLayout);
     }
     static void CompileShader(const std::string& source, const char* const entryPoint, const char* const shaderModel, ID3DBlob** out)
     {
