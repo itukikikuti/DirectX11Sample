@@ -23,11 +23,13 @@ class App final
 public:
 #include "Window.hpp"
 #include "Graphics.hpp"
+#include "Input.hpp"
 
 	App() = delete;
 	static bool Refresh()
 	{
 		GetGraphics().Update();
+        GetInput().Update();
 		return GetWindow().Update();
 	}
     static void Initialize()
@@ -65,6 +67,30 @@ public:
 	{
 		return GetGraphics().GetContext();
 	}
+    static bool GetKey(int VK_CODE)
+    {
+        return GetInput().GetKey(VK_CODE);
+    }
+    static bool GetKeyUp(int VK_CODE)
+    {
+        return GetInput().GetKeyUp(VK_CODE);
+    }
+    static bool GetKeyDown(int VK_CODE)
+    {
+        return GetInput().GetKeyDown(VK_CODE);
+    }
+    static Float2 GetMousePosition()
+    {
+        return GetInput().GetMousePosition();
+    }
+    static void SetMousePosition(float x, float y)
+    {
+        GetInput().SetMousePosition(x, y);
+    }
+    static void SetShowCursor(bool isShowCursor)
+    {
+        GetInput().SetShowCursor(isShowCursor);
+    }
 
 private:
 	static Window& GetWindow()
@@ -77,6 +103,11 @@ private:
 		static std::unique_ptr<Graphics> graphics(new Graphics());
 		return *graphics.get();
 	}
+    static Input& GetInput()
+    {
+        static std::unique_ptr<Input> input(new Input());
+        return *input.get();
+    }
 };
 
 #include "Texture.hpp"
