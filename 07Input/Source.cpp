@@ -27,7 +27,6 @@ int MAIN()
 
         mesh.position.z = 1.0f;
         mesh.Draw();
-
     }
 
     return 0;
