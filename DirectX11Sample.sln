@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "06Camera", "06Camera\06Came
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "07Input", "07Input\07Input.vcxproj", "{1F01E37E-E931-4AF2-9C36-31C4A77C1A21}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "08Timer", "08Timer\08Timer.vcxproj", "{B8A72BED-1930-418F-8B77-C56EC9ED206B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -81,6 +83,14 @@ Global
 		{1F01E37E-E931-4AF2-9C36-31C4A77C1A21}.Release|x64.Build.0 = Release|x64
 		{1F01E37E-E931-4AF2-9C36-31C4A77C1A21}.Release|x86.ActiveCfg = Release|Win32
 		{1F01E37E-E931-4AF2-9C36-31C4A77C1A21}.Release|x86.Build.0 = Release|Win32
+		{B8A72BED-1930-418F-8B77-C56EC9ED206B}.Debug|x64.ActiveCfg = Debug|x64
+		{B8A72BED-1930-418F-8B77-C56EC9ED206B}.Debug|x64.Build.0 = Debug|x64
+		{B8A72BED-1930-418F-8B77-C56EC9ED206B}.Debug|x86.ActiveCfg = Debug|Win32
+		{B8A72BED-1930-418F-8B77-C56EC9ED206B}.Debug|x86.Build.0 = Debug|Win32
+		{B8A72BED-1930-418F-8B77-C56EC9ED206B}.Release|x64.ActiveCfg = Release|x64
+		{B8A72BED-1930-418F-8B77-C56EC9ED206B}.Release|x64.Build.0 = Release|x64
+		{B8A72BED-1930-418F-8B77-C56EC9ED206B}.Release|x86.ActiveCfg = Release|Win32
+		{B8A72BED-1930-418F-8B77-C56EC9ED206B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
