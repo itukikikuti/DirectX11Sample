@@ -149,9 +149,9 @@ public:
 
         constant.world = DirectX::XMMatrixTranspose(
             DirectX::XMMatrixScaling(scale.x, scale.y, scale.z) *
-            DirectX::XMMatrixRotationZ(angles.z) *
-            DirectX::XMMatrixRotationY(angles.y) *
             DirectX::XMMatrixRotationX(angles.x) *
+            DirectX::XMMatrixRotationY(angles.y) *
+            DirectX::XMMatrixRotationZ(angles.z) *
             DirectX::XMMatrixTranslation(position.x, position.y, position.z)
         );
         constant.view = DirectX::XMMatrixTranspose(
