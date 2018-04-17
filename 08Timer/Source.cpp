@@ -15,7 +15,7 @@ int MAIN()
 
     while (App::Refresh())
     {
-        camera.angles += Float3(App::GetMousePosition().y, App::GetMousePosition().x, 0.0f) * 0.1f;
+        camera.angles += Float3(-App::GetMousePosition().y, App::GetMousePosition().x, 0.0f) * 0.1f;
         camera.Update();
 
         App::SetMousePosition(0.0f, 0.0f);

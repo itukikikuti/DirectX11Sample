@@ -31,11 +31,14 @@ public:
         if (GetActiveWindow() != App::GetWindowHandle())
             return;
 
-        mousePosition.x = x;
-        mousePosition.y = y;
-        POINT point = { static_cast<int>(x), static_cast<int>(y) };
+        POINT point = {};
+        point.x = static_cast<int>(x) + App::GetWindowSize().x / 2;
+        point.y = static_cast<int>(-y) + App::GetWindowSize().y / 2;
         ClientToScreen(App::GetWindowHandle(), &point);
         SetCursorPos(point.x, point.y);
+
+        mousePosition.x = x;
+        mousePosition.y = y;
     }
     void SetShowCursor(bool isShowCursor)
     {
@@ -49,9 +52,10 @@ public:
     {
         POINT point = {};
         GetCursorPos(&point);
-
         ScreenToClient(App::GetWindowHandle(), &point);
-        mousePosition = Float2(static_cast<float>(point.x), static_cast<float>(point.y));
+
+        mousePosition.x = static_cast<float>(point.x - App::GetWindowSize().x / 2);
+        mousePosition.y = static_cast<float>(-point.y + App::GetWindowSize().y / 2);
 
         for (int i = 0; i < 256; i++)
         {
