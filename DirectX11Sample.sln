@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01DrawTriangle", "01DrawTriangle\01DrawTriangle.vcxproj", "{8C72989B-3860-4404-99AC-00906F524BDE}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "00", "00\00.vcxproj", "{DD9BCA99-1C36-4FA5-800A-55C702B4E797}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "07DrawPlane", "07DrawPlane\07DrawPlane.vcxproj", "{EC3BB51E-7C4A-4B7D-882F-47CAC9A00EF1}"
 EndProject
@@ -39,14 +37,6 @@ Global
 		{8C72989B-3860-4404-99AC-00906F524BDE}.Release|x64.Build.0 = Release|x64
 		{8C72989B-3860-4404-99AC-00906F524BDE}.Release|x86.ActiveCfg = Release|Win32
 		{8C72989B-3860-4404-99AC-00906F524BDE}.Release|x86.Build.0 = Release|Win32
-		{DD9BCA99-1C36-4FA5-800A-55C702B4E797}.Debug|x64.ActiveCfg = Debug|x64
-		{DD9BCA99-1C36-4FA5-800A-55C702B4E797}.Debug|x64.Build.0 = Debug|x64
-		{DD9BCA99-1C36-4FA5-800A-55C702B4E797}.Debug|x86.ActiveCfg = Debug|Win32
-		{DD9BCA99-1C36-4FA5-800A-55C702B4E797}.Debug|x86.Build.0 = Debug|Win32
-		{DD9BCA99-1C36-4FA5-800A-55C702B4E797}.Release|x64.ActiveCfg = Release|x64
-		{DD9BCA99-1C36-4FA5-800A-55C702B4E797}.Release|x64.Build.0 = Release|x64
-		{DD9BCA99-1C36-4FA5-800A-55C702B4E797}.Release|x86.ActiveCfg = Release|Win32
-		{DD9BCA99-1C36-4FA5-800A-55C702B4E797}.Release|x86.Build.0 = Release|Win32
 		{EC3BB51E-7C4A-4B7D-882F-47CAC9A00EF1}.Debug|x64.ActiveCfg = Debug|x64
 		{EC3BB51E-7C4A-4B7D-882F-47CAC9A00EF1}.Debug|x64.Build.0 = Debug|x64
 		{EC3BB51E-7C4A-4B7D-882F-47CAC9A00EF1}.Debug|x86.ActiveCfg = Debug|Win32

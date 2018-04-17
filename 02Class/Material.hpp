@@ -5,20 +5,20 @@ public:
     {
         App::Initialize();
     }
-    Material(const wchar_t* const filePath)
+    Material(const std::string& source)
     {
         App::Initialize();
-        Create(filePath);
+        Create(source);
     }
     ~Material()
     {
     }
-    void SetBuffer(void* cbuffer, size_t size)
+    void SetBuffer(void* cbuffer, UINT size)
     {
         buffer = cbuffer;
 
         D3D11_BUFFER_DESC constantBufferDesc = {};
-        constantBufferDesc.ByteWidth = size;
+        constantBufferDesc.ByteWidth = (UINT)size;
         constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
         constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
@@ -51,16 +51,16 @@ private:
     ATL::CComPtr<ID3D11PixelShader> pixelShader = nullptr;
     ATL::CComPtr<ID3D11InputLayout> inputLayout = nullptr;
 
-    void Create(const wchar_t* const filePath)
+    void Create(const std::string& source)
     {
         ATL::CComPtr<ID3DBlob> vertexShaderBlob = nullptr;
-        CompileShader(filePath, "VS", "vs_5_0", &vertexShaderBlob);
+        CompileShader(source, "VS", "vs_5_0", &vertexShaderBlob);
 
         vertexShader.Release();
         App::GetGraphicsDevice().CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), nullptr, &vertexShader);
 
         ATL::CComPtr<ID3DBlob> pixelShaderBlob = nullptr;
-        CompileShader(filePath, "PS", "ps_5_0", &pixelShaderBlob);
+        CompileShader(source, "PS", "ps_5_0", &pixelShaderBlob);
 
         pixelShader.Release();
         App::GetGraphicsDevice().CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), nullptr, &pixelShader);
@@ -72,9 +72,9 @@ private:
         };
 
         inputLayout.Release();
-        App::GetGraphicsDevice().CreateInputLayout(inputElementDesc.data(), inputElementDesc.size(), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), &inputLayout);
+        App::GetGraphicsDevice().CreateInputLayout(inputElementDesc.data(), (UINT)inputElementDesc.size(), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), &inputLayout);
     }
-    void CompileShader(const wchar_t* const filePath, const char* const entryPoint, const char* const shaderModel, ID3DBlob** out)
+    static void CompileShader(const std::string& source, const char* const entryPoint, const char* const shaderModel, ID3DBlob** out)
     {
         UINT flags = D3DCOMPILE_ENABLE_STRICTNESS;
 #if defined(_DEBUG)
@@ -82,7 +82,7 @@ private:
 #endif
 
         ATL::CComPtr<ID3DBlob> error = nullptr;
-        D3DCompileFromFile(filePath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, entryPoint, shaderModel, flags, 0, out, &error);
+        D3DCompile(source.c_str(), source.length(), nullptr, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, entryPoint, shaderModel, flags, 0, out, &error);
 
         if (error != nullptr)
         {

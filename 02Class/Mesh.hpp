@@ -8,7 +8,37 @@ public:
     {
         App::Initialize();
 
-        material = Material(L"Shader.hlsl");
+        material = Material(
+            "cbuffer Constant : register(b0)"
+            "{"
+            "    matrix world;"
+            "    matrix view;"
+            "    matrix projection;"
+            "};"
+            "struct Vertex"
+            "{"
+            "    float4 position : POSITION;"
+            "    float3 color : COLOR;"
+            "};"
+            "struct Pixel"
+            "{"
+            "    float4 position : SV_POSITION;"
+            "    float3 color : COLOR;"
+            "};"
+            "Pixel VS(Vertex vertex)"
+            "{"
+            "    Pixel output;"
+            "    output.position = mul(vertex.position, world);"
+            "    output.position = mul(output.position, view);"
+            "    output.position = mul(output.position, projection);"
+            "    output.color = vertex.color;"
+            "    return output;"
+            "}"
+            "float4 PS(Pixel pixel) : SV_TARGET"
+            "{"
+            "    return float4(pixel.color, 1);"
+            "}"
+        );
 
         CreateTriangle();
         Apply();
@@ -29,7 +59,7 @@ public:
         if (vertices.size() > 0)
         {
             D3D11_BUFFER_DESC vertexBufferDesc = {};
-            vertexBufferDesc.ByteWidth = sizeof(Vertex) * vertices.size();
+            vertexBufferDesc.ByteWidth = sizeof(Vertex) * (UINT)vertices.size();
             vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
             vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
@@ -54,7 +84,7 @@ public:
             DirectX::XMMatrixTranslation(0.0f, 0.0f, 5.0f)
         );
         constant.projection = DirectX::XMMatrixTranspose(
-            DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), (float)App::GetWindowSize().x / App::GetWindowSize().y, 0.1f, 100.0f)
+            DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), App::GetWindowSize().x / (float)App::GetWindowSize().y, 0.1f, 100.0f)
         );
 
         material.Attach();
@@ -63,7 +93,7 @@ public:
         UINT offset = 0;
         App::GetGraphicsContext().IASetVertexBuffers(0, 1, &vertexBuffer.p, &stride, &offset);
 
-        App::GetGraphicsContext().Draw(vertices.size(), 0);
+        App::GetGraphicsContext().Draw((UINT)vertices.size(), 0);
     }
 
 private:

@@ -13,19 +13,20 @@ public:
         windowClass.lpfnWndProc = ProceedMessage;
         windowClass.hInstance = instance;
         windowClass.hCursor = cursor;
-        windowClass.lpszClassName = App::NAME;
+        windowClass.lpszClassName = className;
         RegisterClassW(&windowClass);
 
-        handle = CreateWindowW(App::NAME, App::NAME, WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, instance, nullptr);
+        handle = CreateWindowW(className, className, WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, instance, nullptr);
 
-        SetSize(1280, 720);
+        SetSize(640, 480);
 
         ShowWindow(handle, SW_SHOWNORMAL);
 	}
 	~Window()
 	{
-        UnregisterClassW(App::NAME, GetModuleHandleW(nullptr));
-	}
+        UnregisterClassW(className, GetModuleHandleW(nullptr));
+        CoUninitialize();
+    }
 	HWND GetHandle() const
 	{
 		return handle;
@@ -67,6 +68,7 @@ public:
 	}
 
 private:
+    const wchar_t* className = L"DirectX11";
     HWND handle;
 
     static LRESULT CALLBACK ProceedMessage(HWND window, UINT message, WPARAM wParam, LPARAM lParam)

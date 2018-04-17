@@ -5,7 +5,7 @@ public:
     Float3 angles;
     Float3 scale;
     std::vector<Vertex> vertices;
-    std::vector<int> indices;
+    std::vector<UINT> indices;
 
     Mesh()
     {
@@ -15,7 +15,42 @@ public:
         angles = Float3(0.0f, 0.0f, 0.0f);
         scale = Float3(1.0f, 1.0f, 1.0f);
 
-        material = Material(L"Shader.hlsl");
+        material = Material(
+            "cbuffer Constant : register(b0)"
+            "{"
+            "    matrix world;"
+            "    matrix view;"
+            "    matrix projection;"
+            "};"
+            "struct Vertex"
+            "{"
+            "    float4 position : POSITION;"
+            "    float3 normal : NORMAL;"
+            "};"
+            "struct Pixel"
+            "{"
+            "    float4 position : SV_POSITION;"
+            "    float3 normal : NORMAL;"
+            "};"
+            "Pixel VS(Vertex vertex)"
+            "{"
+            "    Pixel output;"
+            "    output.position = mul(vertex.position, world);"
+            "    output.position = mul(output.position, view);"
+            "    output.position = mul(output.position, projection);"
+            "    output.normal = mul(vertex.normal, (float3x3)world);"
+            "    return output;"
+            "}"
+            "float4 PS(Pixel pixel) : SV_TARGET"
+            "{"
+            "    float3 normal = normalize(pixel.normal);"
+            "    float3 lightDirection = normalize(float3(0.25, -1.0, 0.5));"
+            "    float3 lightColor = float3(0.0, 0.0, 1.0);"
+            "    float3 diffuseIntensity = dot(-lightDirection, normal) * lightColor;"
+            "    float3 ambientIntensity = lightColor * 0.2;"
+            "    return float4(diffuseIntensity + ambientIntensity, 1);"
+            "}"
+        );
 
         CreateCube();
         Apply();
@@ -23,13 +58,17 @@ public:
     ~Mesh()
     {
     }
-    void CreateTriangle()
+    void CreateTriangle(bool shouldClear = true)
     {
-        vertices.clear();
+        if (shouldClear)
+        {
+            vertices.clear();
+            indices.clear();
+        }
 
-        vertices.push_back({ Float3(0.0f, 1.0f, 0.0f), Float3(1.0f, 0.0f, 0.0f) });
-        vertices.push_back({ Float3(1.0f, -1.0f, 0.0f), Float3(0.0f, 1.0f, 0.0f) });
-        vertices.push_back({ Float3(-1.0f, -1.0f, 0.0f), Float3(0.0f, 0.0f, 1.0f) });
+        vertices.push_back({ Float3(0.0f, 1.0f, 0.0f), Float3(0.0f, 0.0f, -1.0f) });
+        vertices.push_back({ Float3(1.0f, -1.0f, 0.0f), Float3(0.0f, 0.0f, -1.0f) });
+        vertices.push_back({ Float3(-1.0f, -1.0f, 0.0f), Float3(0.0f, 0.0f, -1.0f) });
     }
     void CreatePlane(Float2 size = Float2(0.5f, 0.5f), Float3 offset = Float3(0.0f, 0.0f, 0.0f), bool shouldClear = true, Float3 leftDirection = Float3(1.0f, 0.0f, 0.0f), Float3 upDirection = Float3(0.0f, 1.0f, 0.0f), Float3 forwardDirection = Float3(0.0f, 0.0f, 1.0f))
     {
@@ -48,7 +87,7 @@ public:
         vertices.push_back({ leftDirection * -size.x + upDirection * -size.y + offset, -forwardDirection });
         vertices.push_back({ leftDirection * size.x + upDirection * -size.y + offset, -forwardDirection });
 
-        size_t indexOffset = vertices.size() - 4;
+        UINT indexOffset = (UINT)vertices.size() - 4;
         indices.push_back(indexOffset + 0);
         indices.push_back(indexOffset + 1);
         indices.push_back(indexOffset + 2);
@@ -76,7 +115,7 @@ public:
         if (vertices.size() > 0)
         {
             D3D11_BUFFER_DESC vertexBufferDesc = {};
-            vertexBufferDesc.ByteWidth = sizeof(Vertex) * vertices.size();
+            vertexBufferDesc.ByteWidth = sizeof(Vertex) * (UINT)vertices.size();
             vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
             vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
@@ -90,7 +129,7 @@ public:
         if (indices.size() > 0)
         {
             D3D11_BUFFER_DESC indexBufferDesc = {};
-            indexBufferDesc.ByteWidth = sizeof(int) * indices.size();
+            indexBufferDesc.ByteWidth = sizeof(UINT) * (UINT)indices.size();
             indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
             indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
@@ -119,7 +158,7 @@ public:
             DirectX::XMMatrixLookAtLH(Float3(0.0f, 1.0f, -3.0f), Float3(0.0f, 0.0f, 0.0f), Float3(0.0f, 1.0f, 0.0f))
         );
         constant.projection = DirectX::XMMatrixTranspose(
-            DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), (float)App::GetWindowSize().x / App::GetWindowSize().y, 0.1f, 100.0f)
+            DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), App::GetWindowSize().x / (float)App::GetWindowSize().y, 0.1f, 100.0f)
         );
 
         material.Attach();
@@ -130,12 +169,12 @@ public:
 
         if (indexBuffer == nullptr)
         {
-            App::GetGraphicsContext().Draw(vertices.size(), 0);
+            App::GetGraphicsContext().Draw((UINT)vertices.size(), 0);
         }
         else
         {
             App::GetGraphicsContext().IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-            App::GetGraphicsContext().DrawIndexed(indices.size(), 0, 0);
+            App::GetGraphicsContext().DrawIndexed((UINT)indices.size(), 0, 0);
         }
     }
 

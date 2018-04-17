@@ -40,7 +40,7 @@ public:
 
         for (size_t i = 0; i < driverTypes.size(); i++)
         {
-            HRESULT r = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[i], nullptr, flags, featureLevels.data(), featureLevels.size(), D3D11_SDK_VERSION, &swapChainDesc, &swapChain, &device, nullptr, &context);
+            HRESULT r = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[i], nullptr, flags, featureLevels.data(), (UINT)featureLevels.size(), D3D11_SDK_VERSION, &swapChainDesc, &swapChain, &device, nullptr, &context);
 
             if (SUCCEEDED(r))
                 break;
@@ -76,7 +76,7 @@ public:
 
 		context->OMSetRenderTargets(1, &renderTargetView.p, nullptr);
 
-		static float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		context->ClearRenderTargetView(renderTargetView, color);
 	}
 

@@ -2,6 +2,7 @@
 
 #define OEMRESOURCE
 #include <memory>
+#include <string>
 #include <vector>
 #include <Windows.h>
 #include <atlbase.h>
@@ -21,8 +22,6 @@ class App final
 public:
 #include "Window.hpp"
 #include "Graphics.hpp"
-
-	static constexpr wchar_t* NAME = L"DirectX11";
 
 	App() = delete;
 	static bool Refresh()

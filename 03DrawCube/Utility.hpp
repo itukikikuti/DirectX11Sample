@@ -19,7 +19,7 @@ public:
 		DirectX::XMStoreFloat2(this, vector);
 		return *this;
 	}
-	operator DirectX::XMVECTOR() const noexcept
+	operator DirectX::XMVECTOR() const
 	{
 		return DirectX::XMLoadFloat2(this);
 	}
@@ -147,7 +147,7 @@ public:
 		DirectX::XMStoreFloat3(this, vector);
 		return *this;
 	}
-	operator DirectX::XMVECTOR() const noexcept
+	operator DirectX::XMVECTOR() const
 	{
 		return DirectX::XMLoadFloat3(this);
 	}
@@ -285,7 +285,7 @@ public:
 		DirectX::XMStoreFloat4(this, vector);
 		return *this;
 	}
-	operator DirectX::XMVECTOR() const noexcept
+	operator DirectX::XMVECTOR() const
 	{
 		return DirectX::XMLoadFloat4(this);
 	}
