@@ -2,17 +2,15 @@
 #include <string>
 #include <vector>
 #include <Windows.h>
-#include <atlbase.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
-
+#include <wrl.h>
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
-using namespace std;
-using namespace ATL;
 using namespace DirectX;
+using Microsoft::WRL::ComPtr;
 
 LRESULT CALLBACK ProceedMessage(HWND window, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -22,10 +20,10 @@ LRESULT CALLBACK ProceedMessage(HWND window, UINT message, WPARAM wParam, LPARAM
     return DefWindowProcW(window, message, wParam, lParam);
 }
 
-void CompileShader(const string& source, const char* const entryPoint, const char* const shaderModel, ID3DBlob** out)
+void CompileShader(const std::string& source, const char* const entryPoint, const char* const shaderModel, ID3DBlob** out)
 {
-    CComPtr<ID3DBlob> error = nullptr;
-    D3DCompile(source.c_str(), source.length(), nullptr, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, entryPoint, shaderModel, D3DCOMPILE_ENABLE_STRICTNESS, 0, out, &error);
+    ComPtr<ID3DBlob> error = nullptr;
+    D3DCompile(source.c_str(), source.length(), nullptr, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, entryPoint, shaderModel, D3DCOMPILE_ENABLE_STRICTNESS, 0, out, error.GetAddressOf());
 
     if (error != nullptr)
     {
@@ -50,7 +48,7 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
 {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-    const wchar_t* className = L"DirectX11";
+    const wchar_t* className = L"DirectX 11";
     const unsigned int width = 640;
     const unsigned int height = 480;
 
@@ -78,7 +76,7 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
 
     ShowWindow(window, SW_SHOWNORMAL);
 
-    vector<D3D_DRIVER_TYPE> driverTypes
+    std::vector<D3D_DRIVER_TYPE> driverTypes
     {
         D3D_DRIVER_TYPE_HARDWARE,
         D3D_DRIVER_TYPE_WARP,
@@ -86,7 +84,7 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
         D3D_DRIVER_TYPE_SOFTWARE,
     };
 
-    vector<D3D_FEATURE_LEVEL> featureLevels
+    std::vector<D3D_FEATURE_LEVEL> featureLevels
     {
         D3D_FEATURE_LEVEL_11_0,
         D3D_FEATURE_LEVEL_10_1,
@@ -106,13 +104,13 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
     swapChainDesc.OutputWindow = window;
     swapChainDesc.Windowed = true;
 
-    CComPtr<ID3D11Device> device = nullptr;
-    CComPtr<IDXGISwapChain> swapChain = nullptr;
-    CComPtr<ID3D11DeviceContext> context = nullptr;
+    ComPtr<ID3D11Device> device = nullptr;
+    ComPtr<IDXGISwapChain> swapChain = nullptr;
+    ComPtr<ID3D11DeviceContext> context = nullptr;
 
     for (size_t i = 0; i < driverTypes.size(); i++)
     {
-        HRESULT r = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[i], nullptr, 0, featureLevels.data(), (UINT)featureLevels.size(), D3D11_SDK_VERSION, &swapChainDesc, &swapChain, &device, nullptr, &context);
+        HRESULT r = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[i], nullptr, 0, featureLevels.data(), (UINT)featureLevels.size(), D3D11_SDK_VERSION, &swapChainDesc, swapChain.GetAddressOf(), device.GetAddressOf(), nullptr, context.GetAddressOf());
 
         if (SUCCEEDED(r))
             break;
@@ -120,11 +118,11 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
 
     context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    CComPtr<ID3D11Texture2D> renderTexture = nullptr;
-    swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&renderTexture));
+    ComPtr<ID3D11Texture2D> renderTexture = nullptr;
+    swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(renderTexture.GetAddressOf()));
 
-    CComPtr<ID3D11RenderTargetView> renderTargetView = nullptr;
-    device->CreateRenderTargetView(renderTexture, nullptr, &renderTargetView);
+    ComPtr<ID3D11RenderTargetView> renderTargetView = nullptr;
+    device->CreateRenderTargetView(renderTexture.Get(), nullptr, renderTargetView.GetAddressOf());
 
     D3D11_VIEWPORT viewPort = {};
     viewPort.Width = width;
@@ -132,7 +130,7 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
     viewPort.MaxDepth = 1.0f;
     context->RSSetViewports(1, &viewPort);
 
-    vector<Vertex> vertices
+    std::vector<Vertex> vertices
     {
         { XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f) },
         { XMFLOAT3(1.0f, -1.0f, 0.0f), XMFLOAT3(0.0f, 1.0f, 0.0f) },
@@ -147,10 +145,10 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
     D3D11_SUBRESOURCE_DATA vertexSubresourceData = {};
     vertexSubresourceData.pSysMem = vertices.data();
 
-    CComPtr<ID3D11Buffer> vertexBuffer = nullptr;
-    device->CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, &vertexBuffer);
+    ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
+    device->CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, vertexBuffer.GetAddressOf());
 
-    const string shader(
+    const std::string shader(
         "cbuffer Constant : register(b0)"
         "{"
         "    matrix world;"
@@ -182,34 +180,34 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
         "}"
     );
 
-    CComPtr<ID3DBlob> vertexShaderBlob = nullptr;
-    CompileShader(shader, "VS", "vs_5_0", &vertexShaderBlob);
+    ComPtr<ID3DBlob> vertexShaderBlob = nullptr;
+    CompileShader(shader, "VS", "vs_5_0", vertexShaderBlob.GetAddressOf());
 
-    CComPtr<ID3D11VertexShader> vertexShader = nullptr;
-    device->CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), nullptr, &vertexShader);
+    ComPtr<ID3D11VertexShader> vertexShader = nullptr;
+    device->CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), nullptr, vertexShader.GetAddressOf());
 
-    CComPtr<ID3DBlob> pixelShaderBlob = nullptr;
-    CompileShader(shader, "PS", "ps_5_0", &pixelShaderBlob);
+    ComPtr<ID3DBlob> pixelShaderBlob = nullptr;
+    CompileShader(shader, "PS", "ps_5_0", pixelShaderBlob.GetAddressOf());
 
-    CComPtr<ID3D11PixelShader> pixelShader = nullptr;
-    device->CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), nullptr, &pixelShader);
+    ComPtr<ID3D11PixelShader> pixelShader = nullptr;
+    device->CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), nullptr, pixelShader.GetAddressOf());
 
-    vector<D3D11_INPUT_ELEMENT_DESC> inputElementDesc
+    std::vector<D3D11_INPUT_ELEMENT_DESC> inputElementDesc
     {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
         { "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
 
-    CComPtr<ID3D11InputLayout> inputLayout = nullptr;
-    device->CreateInputLayout(inputElementDesc.data(), (UINT)inputElementDesc.size(), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), &inputLayout);
+    ComPtr<ID3D11InputLayout> inputLayout = nullptr;
+    device->CreateInputLayout(inputElementDesc.data(), (UINT)inputElementDesc.size(), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), inputLayout.GetAddressOf());
 
     D3D11_BUFFER_DESC constantBufferDesc = {};
     constantBufferDesc.ByteWidth = sizeof(Constant);
     constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
     constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
-    CComPtr<ID3D11Buffer> constantBuffer = nullptr;
-    device->CreateBuffer(&constantBufferDesc, nullptr, &constantBuffer);
+    ComPtr<ID3D11Buffer> constantBuffer = nullptr;
+    device->CreateBuffer(&constantBufferDesc, nullptr, constantBuffer.GetAddressOf());
 
     Constant constant;
     constant.view = XMMatrixTranspose(
@@ -240,21 +238,21 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
                 XMMatrixRotationY(angle)
             );
 
-            context->OMSetRenderTargets(1, &renderTargetView.p, nullptr);
+            context->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), nullptr);
 
-            context->UpdateSubresource(constantBuffer, 0, nullptr, &constant, 0, 0);
-            context->VSSetConstantBuffers(0, 1, &constantBuffer.p);
+            context->UpdateSubresource(constantBuffer.Get(), 0, nullptr, &constant, 0, 0);
+            context->VSSetConstantBuffers(0, 1, constantBuffer.GetAddressOf());
 
             UINT stride = sizeof(Vertex);
             UINT offset = 0;
-            context->IASetVertexBuffers(0, 1, &vertexBuffer.p, &stride, &offset);
+            context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
 
-            context->VSSetShader(vertexShader, nullptr, 0);
-            context->PSSetShader(pixelShader, nullptr, 0);
-            context->IASetInputLayout(inputLayout);
+            context->VSSetShader(vertexShader.Get(), nullptr, 0);
+            context->PSSetShader(pixelShader.Get(), nullptr, 0);
+            context->IASetInputLayout(inputLayout.Get());
 
             float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-            context->ClearRenderTargetView(renderTargetView, color);
+            context->ClearRenderTargetView(renderTargetView.Get(), color);
 
             context->Draw((UINT)vertices.size(), 0);
 
