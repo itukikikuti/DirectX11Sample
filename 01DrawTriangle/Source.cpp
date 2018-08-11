@@ -6,6 +6,7 @@
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 #include <wrl.h>
+
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
@@ -27,7 +28,8 @@ void CompileShader(const std::string& source, const char* const entryPoint, cons
 
     if (error != nullptr)
     {
-        OutputDebugStringA(static_cast<char*>(error->GetBufferPointer()));
+        OutputDebugStringA((char*)error->GetBufferPointer());
+        MessageBoxA(nullptr, (char*)error->GetBufferPointer(), "Shader error", MB_ICONERROR | MB_OK);
     }
 }
 
@@ -49,15 +51,13 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     const wchar_t* className = L"DirectX 11";
-    const unsigned int width = 640;
-    const unsigned int height = 480;
-
-    HCURSOR cursor = static_cast<HCURSOR>(LoadImageW(nullptr, MAKEINTRESOURCEW(OCR_NORMAL), IMAGE_CURSOR, 0, 0, LR_SHARED));
+    const int width = 640;
+    const int height = 480;
 
     WNDCLASSW windowClass = {};
     windowClass.lpfnWndProc = ProceedMessage;
     windowClass.hInstance = instance;
-    windowClass.hCursor = cursor;
+    windowClass.hCursor = (HCURSOR)LoadImageW(nullptr, MAKEINTRESOURCEW(OCR_NORMAL), IMAGE_CURSOR, 0, 0, LR_SHARED);
     windowClass.lpszClassName = className;
     RegisterClassW(&windowClass);
 
@@ -72,6 +72,7 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
     int h = (windowRect.bottom - windowRect.top) - (clientRect.bottom - clientRect.top) + height;
     int x = (GetSystemMetrics(SM_CXSCREEN) - w) / 2;
     int y = (GetSystemMetrics(SM_CYSCREEN) - h) / 2;
+
     SetWindowPos(window, nullptr, x, y, w, h, SWP_FRAMECHANGED);
 
     ShowWindow(window, SW_SHOWNORMAL);
@@ -210,11 +211,16 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
     device->CreateBuffer(&constantBufferDesc, nullptr, constantBuffer.GetAddressOf());
 
     Constant constant;
+
     constant.view = XMMatrixTranspose(
-        XMMatrixTranslation(0.0f, 0.0f, 5.0f)
+        XMMatrixInverse(
+            nullptr,
+            XMMatrixTranslation(0.0f, 0.0f, -5.0f)
+        )
     );
+
     constant.projection = XMMatrixTranspose(
-        XMMatrixPerspectiveFovLH(XMConvertToRadians(60.0f), width / (float)height, 0.1f, 100.0f)
+        XMMatrixPerspectiveFovLH(XMConvertToRadians(60.0f), float(width) / height, 0.1f, 1000.0f)
     );
 
     float angle = 0.0f;
@@ -233,9 +239,9 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
         }
         else
         {
-            angle += 0.01f;
+            angle += 1.0f;
             constant.world = XMMatrixTranspose(
-                XMMatrixRotationY(angle)
+                XMMatrixRotationY(XMConvertToRadians(angle))
             );
 
             context->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), nullptr);
@@ -251,8 +257,8 @@ int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
             context->PSSetShader(pixelShader.Get(), nullptr, 0);
             context->IASetInputLayout(inputLayout.Get());
 
-            float color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-            context->ClearRenderTargetView(renderTargetView.Get(), color);
+            float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+            context->ClearRenderTargetView(renderTargetView.Get(), clearColor);
 
             context->Draw((UINT)vertices.size(), 0);
 
