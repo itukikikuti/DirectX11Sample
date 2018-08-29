@@ -46,13 +46,15 @@ struct Constant
     XMMATRIX projection;
 };
 
-int APIENTRY wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int)
+int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     const wchar_t* className = L"DirectX 11";
     const int width = 640;
     const int height = 480;
+
+    HINSTANCE instance = GetModuleHandleW(nullptr);
 
     WNDCLASSW windowClass = {};
     windowClass.lpfnWndProc = ProceedMessage;
