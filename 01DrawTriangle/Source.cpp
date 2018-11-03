@@ -1,4 +1,5 @@
 #define OEMRESOURCE
+#include <memory>
 #include <string>
 #include <vector>
 #include <Windows.h>
@@ -13,13 +14,141 @@
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
-LRESULT CALLBACK ProceedMessage(HWND window, UINT message, WPARAM wParam, LPARAM lParam)
+class Window
 {
-    if (message == WM_DESTROY)
-        PostQuitMessage(0);
+public:
+    static HWND GetHandle()
+    {
+        return Get().handle;
+    }
+    static XMINT2 GetSize()
+    {
+        RECT clientRect = {};
+        GetClientRect(Get().handle, &clientRect);
 
-    return DefWindowProcW(window, message, wParam, lParam);
-}
+        return XMINT2(clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
+    }
+    static void SetSize(int width, int height)
+    {
+        RECT windowRect = {};
+        RECT clientRect = {};
+        GetWindowRect(Get().handle, &windowRect);
+        GetClientRect(Get().handle, &clientRect);
+
+        int w = (windowRect.right - windowRect.left) - (clientRect.right - clientRect.left) + width;
+        int h = (windowRect.bottom - windowRect.top) - (clientRect.bottom - clientRect.top) + height;
+        int x = (GetSystemMetrics(SM_CXSCREEN) - w) / 2;
+        int y = (GetSystemMetrics(SM_CYSCREEN) - h) / 2;
+
+        SetWindowPos(Get().handle, nullptr, x, y, w, h, SWP_FRAMECHANGED);
+    }
+
+private:
+    struct Data
+    {
+        const wchar_t* name = L"GameLibrary";
+        HWND handle;
+    };
+
+    static Data& Get()
+    {
+        static std::unique_ptr<Data> data;
+
+        if (data == nullptr)
+        {
+            data = std::make_unique<Data>();
+
+            HINSTANCE instance = GetModuleHandleW(nullptr);
+
+            WNDCLASSW windowClass = {};
+            windowClass.lpfnWndProc = ProceedMessage;
+            windowClass.hInstance = instance;
+            windowClass.hCursor = (HCURSOR)LoadImageW(nullptr, MAKEINTRESOURCEW(OCR_NORMAL), IMAGE_CURSOR, 0, 0, LR_SHARED);
+            windowClass.lpszClassName = Get().name;
+            RegisterClassW(&windowClass);
+
+            Get().handle = CreateWindowW(Get().name, Get().name, WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, instance, nullptr);
+
+            SetSize(640, 480);
+
+            ShowWindow(Get().handle, SW_SHOWNORMAL);
+        }
+
+        return *data;
+    }
+    static LRESULT CALLBACK ProceedMessage(HWND window, UINT message, WPARAM wParam, LPARAM lParam)
+    {
+        if (message == WM_DESTROY)
+            PostQuitMessage(0);
+
+        return DefWindowProcW(window, message, wParam, lParam);
+    }
+};
+
+class Graphics
+{
+private:
+    struct Data
+    {
+        ComPtr<ID3D11Device> device = nullptr;
+        ComPtr<IDXGISwapChain> swapChain = nullptr;
+        ComPtr<ID3D11DeviceContext> context = nullptr;
+    };
+
+    static Data& Get()
+    {
+        static std::unique_ptr<Data> data;
+
+        if (data == nullptr)
+        {
+            data = std::make_unique<Data>();
+
+            std::vector<D3D_DRIVER_TYPE> driverTypes
+            {
+                D3D_DRIVER_TYPE_HARDWARE,
+                D3D_DRIVER_TYPE_WARP,
+                D3D_DRIVER_TYPE_REFERENCE,
+                D3D_DRIVER_TYPE_SOFTWARE,
+            };
+
+            std::vector<D3D_FEATURE_LEVEL> featureLevels
+            {
+                D3D_FEATURE_LEVEL_11_0,
+                D3D_FEATURE_LEVEL_10_1,
+                D3D_FEATURE_LEVEL_10_0,
+            };
+
+            DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
+            swapChainDesc.BufferDesc.Width = Window::GetSize().x;
+            swapChainDesc.BufferDesc.Height = Window::GetSize().y;
+            swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+            swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+            swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+            swapChainDesc.SampleDesc.Count = 1;
+            swapChainDesc.SampleDesc.Quality = 0;
+            swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+            swapChainDesc.BufferCount = 1;
+            swapChainDesc.OutputWindow = Window::GetHandle();
+            swapChainDesc.Windowed = true;
+
+            for (size_t i = 0; i < driverTypes.size(); i++)
+            {
+                HRESULT r = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[i], nullptr, 0, featureLevels.data(), (UINT)featureLevels.size(), D3D11_SDK_VERSION, &swapChainDesc, Get().swapChain.GetAddressOf(), Get().device.GetAddressOf(), nullptr, Get().context.GetAddressOf());
+
+                if (SUCCEEDED(r))
+                    break;
+            }
+
+            Get().context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+            D3D11_VIEWPORT viewPort = {};
+            viewPort.Width = Window::GetSize().x;
+            viewPort.Height = Window::GetSize().y;
+            viewPort.MaxDepth = 1.0f;
+            Get().context->RSSetViewports(1, &viewPort);
+        }
+    }
+};
 
 void CompileShader(const std::string& source, const char* const entryPoint, const char* const shaderModel, ID3DBlob** out)
 {
@@ -50,88 +179,11 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-    const wchar_t* className = L"DirectX 11";
-    const int width = 640;
-    const int height = 480;
-
-    HINSTANCE instance = GetModuleHandleW(nullptr);
-
-    WNDCLASSW windowClass = {};
-    windowClass.lpfnWndProc = ProceedMessage;
-    windowClass.hInstance = instance;
-    windowClass.hCursor = (HCURSOR)LoadImageW(nullptr, MAKEINTRESOURCEW(OCR_NORMAL), IMAGE_CURSOR, 0, 0, LR_SHARED);
-    windowClass.lpszClassName = className;
-    RegisterClassW(&windowClass);
-
-    HWND window = CreateWindowW(className, className, WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, instance, nullptr);
-
-    RECT windowRect = {};
-    RECT clientRect = {};
-    GetWindowRect(window, &windowRect);
-    GetClientRect(window, &clientRect);
-
-    int w = (windowRect.right - windowRect.left) - (clientRect.right - clientRect.left) + width;
-    int h = (windowRect.bottom - windowRect.top) - (clientRect.bottom - clientRect.top) + height;
-    int x = (GetSystemMetrics(SM_CXSCREEN) - w) / 2;
-    int y = (GetSystemMetrics(SM_CYSCREEN) - h) / 2;
-
-    SetWindowPos(window, nullptr, x, y, w, h, SWP_FRAMECHANGED);
-
-    ShowWindow(window, SW_SHOWNORMAL);
-
-    std::vector<D3D_DRIVER_TYPE> driverTypes
-    {
-        D3D_DRIVER_TYPE_HARDWARE,
-        D3D_DRIVER_TYPE_WARP,
-        D3D_DRIVER_TYPE_REFERENCE,
-        D3D_DRIVER_TYPE_SOFTWARE,
-    };
-
-    std::vector<D3D_FEATURE_LEVEL> featureLevels
-    {
-        D3D_FEATURE_LEVEL_11_0,
-        D3D_FEATURE_LEVEL_10_1,
-        D3D_FEATURE_LEVEL_10_0,
-    };
-
-    DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
-    swapChainDesc.BufferDesc.Width = width;
-    swapChainDesc.BufferDesc.Height = height;
-    swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
-    swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-    swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    swapChainDesc.SampleDesc.Count = 1;
-    swapChainDesc.SampleDesc.Quality = 0;
-    swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    swapChainDesc.BufferCount = 1;
-    swapChainDesc.OutputWindow = window;
-    swapChainDesc.Windowed = true;
-
-    ComPtr<ID3D11Device> device = nullptr;
-    ComPtr<IDXGISwapChain> swapChain = nullptr;
-    ComPtr<ID3D11DeviceContext> context = nullptr;
-
-    for (size_t i = 0; i < driverTypes.size(); i++)
-    {
-        HRESULT r = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[i], nullptr, 0, featureLevels.data(), (UINT)featureLevels.size(), D3D11_SDK_VERSION, &swapChainDesc, swapChain.GetAddressOf(), device.GetAddressOf(), nullptr, context.GetAddressOf());
-
-        if (SUCCEEDED(r))
-            break;
-    }
-
-    context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
     ComPtr<ID3D11Texture2D> renderTexture = nullptr;
     swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(renderTexture.GetAddressOf()));
 
     ComPtr<ID3D11RenderTargetView> renderTargetView = nullptr;
     device->CreateRenderTargetView(renderTexture.Get(), nullptr, renderTargetView.GetAddressOf());
-
-    D3D11_VIEWPORT viewPort = {};
-    viewPort.Width = width;
-    viewPort.Height = height;
-    viewPort.MaxDepth = 1.0f;
-    context->RSSetViewports(1, &viewPort);
 
     std::vector<Vertex> vertices
     {
@@ -214,16 +266,8 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 
     Constant constant;
 
-    constant.view = XMMatrixTranspose(
-        XMMatrixInverse(
-            nullptr,
-            XMMatrixTranslation(0.0f, 0.0f, -5.0f)
-        )
-    );
-
-    constant.projection = XMMatrixTranspose(
-        XMMatrixPerspectiveFovLH(XMConvertToRadians(60.0f), float(width) / height, 0.1f, 1000.0f)
-    );
+    constant.view = XMMatrixTranspose(XMMatrixInverse(nullptr, XMMatrixTranslation(0.0f, 0.0f, -5.0f)));
+    constant.projection = XMMatrixTranspose(XMMatrixPerspectiveFovLH(XMConvertToRadians(60.0f), float(width) / height, 0.1f, 1000.0f));
 
     float angle = 0.0f;
 
@@ -242,9 +286,7 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
         else
         {
             angle += 1.0f;
-            constant.world = XMMatrixTranspose(
-                XMMatrixRotationY(XMConvertToRadians(angle))
-            );
+            constant.world = XMMatrixTranspose(XMMatrixRotationY(XMConvertToRadians(angle)));
 
             context->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), nullptr);
 
