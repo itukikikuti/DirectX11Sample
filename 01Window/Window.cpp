@@ -1,20 +1,34 @@
 // Window.cpp
 #include "Window.hpp"
 
-const wchar_t* Window::name = L"GameLibrary";
+const wchar_t* Window::name = L"GameLib";
 HWND Window::handle;
+
+void Window::Initialize()
+{
+    HINSTANCE instance = GetModuleHandleW(nullptr);
+
+    WNDCLASSW windowClass = {};
+    windowClass.lpfnWndProc = ProceedMessage;
+    windowClass.hInstance = instance;
+    windowClass.hCursor = (HCURSOR)LoadImageW(nullptr, MAKEINTRESOURCEW(OCR_NORMAL), IMAGE_CURSOR, 0, 0, LR_SHARED);
+    windowClass.lpszClassName = name;
+    RegisterClassW(&windowClass);
+
+    handle = CreateWindowW(name, name, WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, instance, nullptr);
+
+    SetSize(640, 480);
+
+    ShowWindow(handle, SW_SHOWNORMAL);
+}
 
 HWND Window::GetHandle()
 {
-    Initialize();
-
     return handle;
 }
 
 DirectX::XMINT2 Window::GetSize()
 {
-    Initialize();
-
     RECT clientRect = {};
     GetClientRect(handle, &clientRect);
 
@@ -23,8 +37,6 @@ DirectX::XMINT2 Window::GetSize()
 
 void Window::SetSize(int width, int height)
 {
-    Initialize();
-
     RECT windowRect = {};
     RECT clientRect = {};
     GetWindowRect(handle, &windowRect);
@@ -40,8 +52,6 @@ void Window::SetSize(int width, int height)
 
 bool Window::Update()
 {
-    Initialize();
-
     MSG message = {};
 
     while (PeekMessageW(&message, nullptr, 0, 0, PM_REMOVE))
@@ -54,31 +64,6 @@ bool Window::Update()
     }
 
     return true;
-}
-
-void Window::Initialize()
-{
-    static bool initialized = false;
-
-    if (initialized)
-        return;
-
-    initialized = true;
-
-    HINSTANCE instance = GetModuleHandleW(nullptr);
-
-    WNDCLASSW windowClass = {};
-    windowClass.lpfnWndProc = ProceedMessage;
-    windowClass.hInstance = instance;
-    windowClass.hCursor = (HCURSOR)LoadImageW(nullptr, MAKEINTRESOURCEW(OCR_NORMAL), IMAGE_CURSOR, 0, 0, LR_SHARED);
-    windowClass.lpszClassName = name;
-    RegisterClassW(&windowClass);
-
-    handle = CreateWindowW(name, name, WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, instance, nullptr);
-
-    SetSize(640, 480);
-
-    ShowWindow(handle, SW_SHOWNORMAL);
 }
 
 LRESULT CALLBACK Window::ProceedMessage(HWND window, UINT message, WPARAM wParam, LPARAM lParam)
