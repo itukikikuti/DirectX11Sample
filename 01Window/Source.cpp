@@ -1,7 +1,7 @@
 // Source.cpp
 #include "Window.hpp"
 
-int main()
+int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 {
     while (Window::Update())
     {
