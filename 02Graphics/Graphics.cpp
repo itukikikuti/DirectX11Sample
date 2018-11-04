@@ -46,14 +46,6 @@ void Graphics::Initialize()
         if (SUCCEEDED(r))
             break;
     }
-
-    context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-    D3D11_VIEWPORT viewPort = {};
-    viewPort.Width = Window::GetSize().x;
-    viewPort.Height = Window::GetSize().y;
-    viewPort.MaxDepth = 1.0f;
-    context->RSSetViewports(1, &viewPort);
 }
 
 ID3D11Device& Graphics::GetDevice()
