@@ -21,10 +21,14 @@ Camera::~Camera()
 {
 }
 
-void Camera::Update()
+void Camera::Start()
 {
     Graphics::GetContext().OMSetRenderTargets(1, renderTargetView.GetAddressOf(), nullptr);
 
     float clearColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
     Graphics::GetContext().ClearRenderTargetView(renderTargetView.Get(), clearColor);
+}
+
+void Camera::Stop()
+{
 }

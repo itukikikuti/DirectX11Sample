@@ -8,7 +8,8 @@ class Camera
 public:
     Camera();
     ~Camera();
-    void Update();
+    void Start();
+    void Stop();
 
 private:
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView;

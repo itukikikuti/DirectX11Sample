@@ -24,7 +24,9 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 
     while (Refresh())
     {
-        camera.Update();
+        camera.Start();
+        // ‚±‚±‚Å•`‰æ
+        camera.Stop();
     }
 
     return 0;
