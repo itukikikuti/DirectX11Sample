@@ -17,10 +17,6 @@ Camera::Camera()
     Graphics::GetContext().RSSetViewports(1, &viewPort);
 }
 
-Camera::~Camera()
-{
-}
-
 void Camera::Start()
 {
     Graphics::GetContext().OMSetRenderTargets(1, renderTargetView.GetAddressOf(), nullptr);

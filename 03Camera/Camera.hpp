@@ -7,7 +7,6 @@ class Camera
 {
 public:
     Camera();
-    ~Camera();
     void Start();
     void Stop();
 
