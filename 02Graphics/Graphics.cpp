@@ -56,6 +56,21 @@ void Graphics::Initialize()
     context->RSSetViewports(1, &viewPort);
 }
 
+ID3D11Device& Graphics::GetDevice()
+{
+    return *device.Get();
+}
+
+ID3D11DeviceContext& Graphics::GetContext()
+{
+    return *context.Get();
+}
+
+IDXGISwapChain& Graphics::GetSwapChain()
+{
+    return *swapChain.Get();
+}
+
 void Graphics::Update()
 {
     swapChain->Present(1, 0);
