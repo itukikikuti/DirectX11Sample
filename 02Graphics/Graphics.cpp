@@ -1,9 +1,7 @@
 // Graphics.cpp
 #include <vector>
-#include <DirectXMath.h>
 #include "Window.hpp"
 #include "Graphics.hpp"
-#pragma comment(lib, "d3d11.lib")
 
 Microsoft::WRL::ComPtr<ID3D11Device> Graphics::device;
 Microsoft::WRL::ComPtr<ID3D11DeviceContext> Graphics::context;
