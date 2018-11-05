@@ -16,7 +16,7 @@ public:
     void Attach();
 
 private:
-    Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader = nullptr;
-    Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader = nullptr;
-    Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader;
+    Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
+    Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
 };
