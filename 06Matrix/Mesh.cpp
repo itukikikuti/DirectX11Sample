@@ -4,6 +4,10 @@
 
 Mesh::Mesh()
 {
+    position = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+    rotation = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+    scale = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
+
     vertices.push_back(Vertex(DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f), DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f)));
     vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f)));
     vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f), DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f)));
@@ -21,6 +25,18 @@ Mesh::Mesh()
 
 void Mesh::Draw()
 {
+    shaderData.Get().worldMatrix = DirectX::XMMatrixTranspose(
+        DirectX::XMMatrixScaling(scale.x, scale.y, scale.z) *
+        DirectX::XMMatrixRotationRollPitchYaw(
+            DirectX::XMConvertToRadians(rotation.x),
+            DirectX::XMConvertToRadians(rotation.y),
+            DirectX::XMConvertToRadians(rotation.z)
+        ) *
+        DirectX::XMMatrixTranslation(position.x, position.y, position.z)
+    );
+
+    shaderData.Attach(0);
+
     shader.Attach();
 
     UINT stride = sizeof(Vertex);
