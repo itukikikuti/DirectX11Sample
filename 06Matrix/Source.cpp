@@ -29,11 +29,16 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 
     Mesh mesh;
 
+    float temp = 0.0f;
+
     while (Refresh())
     {
         camera.Start();
         
-        mesh.rotation.y += 1.0f;
+        temp += 0.1f;
+
+        mesh.position = DirectX::XMFLOAT3(cosf(temp), sinf(temp), 0.0f);
+        mesh.rotation.y = temp * 10.0f;
         mesh.Draw();
 
         camera.Stop();
