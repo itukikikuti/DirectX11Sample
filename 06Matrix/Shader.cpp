@@ -9,7 +9,7 @@ Shader Shader::GetDefault()
     static std::unique_ptr<Shader> shader(new Shader(
         "cbuffer Object : register(b0)"
         "{"
-        "    matrix worldMatrix;"
+        "    matrix modelMatrix;"
         "};"
         "cbuffer Camera : register(b1)"
         "{"
@@ -29,7 +29,7 @@ Shader Shader::GetDefault()
         "Pixel VS(Vertex vertex)"
         "{"
         "    Pixel output;"
-        "    output.position = mul(vertex.position, worldMatrix);"
+        "    output.position = mul(vertex.position, modelMatrix);"
         "    output.position = mul(output.position, viewMatrix);"
         "    output.position = mul(output.position, projectionMatrix);"
         "    output.color = vertex.color;"

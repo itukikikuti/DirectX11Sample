@@ -33,7 +33,7 @@ public:
 private:
     struct ShaderData
     {
-        DirectX::XMMATRIX worldMatrix;
+        DirectX::XMMATRIX modelMatrix;
     };
 
     CBuffer<ShaderData> shaderData;

@@ -25,7 +25,7 @@ Mesh::Mesh()
 
 void Mesh::Draw()
 {
-    shaderData.Get().worldMatrix = DirectX::XMMatrixTranspose(
+    shaderData.Get().modelMatrix = DirectX::XMMatrixTranspose(
         DirectX::XMMatrixScaling(scale.x, scale.y, scale.z) *
         DirectX::XMMatrixRotationRollPitchYaw(
             DirectX::XMConvertToRadians(rotation.x),
