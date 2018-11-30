@@ -8,9 +8,14 @@ Mesh::Mesh()
     rotation = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
     scale = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
 
-    vertices.push_back(Vertex(DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f), DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f)));
-    vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f)));
-    vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f), DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f)));
+    std::vector<Vertex> vertices
+    {
+        Vertex(DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f), DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f)),
+        Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 1.0f)),
+        Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f), DirectX::XMFLOAT3(1.0f, 0.0f, 1.0f))
+    };
+
+    vertexSize = (UINT)vertices.size();
 
     D3D11_BUFFER_DESC vertexBufferDesc = {};
     vertexBufferDesc.ByteWidth = sizeof(Vertex) * (UINT)vertices.size();
@@ -45,5 +50,5 @@ void Mesh::Draw()
 
     Graphics::GetContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    Graphics::GetContext().Draw((UINT)vertices.size(), 0);
+    Graphics::GetContext().Draw(vertexSize, 0);
 }

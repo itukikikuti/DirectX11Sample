@@ -24,7 +24,6 @@ public:
     DirectX::XMFLOAT3 position;
     DirectX::XMFLOAT3 rotation;
     DirectX::XMFLOAT3 scale;
-    std::vector<Vertex> vertices;
     Shader shader = Shader::GetDefault();
 
     Mesh();
@@ -38,4 +37,5 @@ private:
 
     CBuffer<ShaderData> shaderData;
     Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
+    UINT vertexSize;
 };

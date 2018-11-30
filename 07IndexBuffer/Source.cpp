@@ -24,21 +24,21 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
     Initialize();
 
     Camera camera;
-    camera.position = DirectX::XMFLOAT3(0.0f, 1.0f, -5.0f);
-    camera.rotation = DirectX::XMFLOAT3(10.0f, 0.0f, 0.0f);
+    camera.position = DirectX::XMFLOAT3(0.0f, 2.0f, -2.0f);
+    camera.rotation = DirectX::XMFLOAT3(45.0f, 0.0f, 0.0f);
 
     Mesh mesh;
+    mesh.CreateCube(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
 
-    float temp = 0.0f;
+    float angle = 0.0f;
 
     while (Refresh())
     {
         camera.Start();
         
-        temp += 0.1f;
+        angle += 1.0f;
 
-        mesh.position = DirectX::XMFLOAT3(cosf(temp), sinf(temp), 0.0f);
-        mesh.rotation.y = temp * 10.0f;
+        mesh.rotation.y = angle;
         mesh.Draw();
 
         camera.Stop();

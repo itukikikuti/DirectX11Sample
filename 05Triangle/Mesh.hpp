@@ -20,7 +20,6 @@ struct Vertex
 class Mesh
 {
 public:
-    std::vector<Vertex> vertices;
     Shader shader = Shader::GetDefault();
 
     Mesh();
@@ -28,4 +27,5 @@ public:
 
 private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
+    UINT vertexSize;
 };

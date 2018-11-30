@@ -24,10 +24,13 @@ public:
     DirectX::XMFLOAT3 position;
     DirectX::XMFLOAT3 rotation;
     DirectX::XMFLOAT3 scale;
-    std::vector<Vertex> vertices;
     Shader shader = Shader::GetDefault();
 
     Mesh();
+    void Create(const std::vector<Vertex>& vertices, const std::vector<UINT>& indices);
+    void CreateTriangle(float size);
+    void CreatePlane(DirectX::XMFLOAT2 size);
+    void CreateCube(DirectX::XMFLOAT3 size);
     void Draw();
 
 private:
@@ -38,4 +41,6 @@ private:
 
     CBuffer<ShaderData> shaderData;
     Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
+    UINT vertexSize;
 };
