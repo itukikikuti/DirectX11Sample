@@ -31,6 +31,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "04Shader", "04Shader\04Shad
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "06Matrix", "06Matrix\06Matrix.vcxproj", "{A710BF1F-AFE2-40BE-97CE-9D8150B21384}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "07IndexBuffer", "07IndexBuffer\07IndexBuffer.vcxproj", "{EA6CACF2-4FED-4D8C-952C-7F9950985467}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -151,6 +153,14 @@ Global
 		{A710BF1F-AFE2-40BE-97CE-9D8150B21384}.Release|x64.Build.0 = Release|x64
 		{A710BF1F-AFE2-40BE-97CE-9D8150B21384}.Release|x86.ActiveCfg = Release|Win32
 		{A710BF1F-AFE2-40BE-97CE-9D8150B21384}.Release|x86.Build.0 = Release|Win32
+		{EA6CACF2-4FED-4D8C-952C-7F9950985467}.Debug|x64.ActiveCfg = Debug|x64
+		{EA6CACF2-4FED-4D8C-952C-7F9950985467}.Debug|x64.Build.0 = Debug|x64
+		{EA6CACF2-4FED-4D8C-952C-7F9950985467}.Debug|x86.ActiveCfg = Debug|Win32
+		{EA6CACF2-4FED-4D8C-952C-7F9950985467}.Debug|x86.Build.0 = Debug|Win32
+		{EA6CACF2-4FED-4D8C-952C-7F9950985467}.Release|x64.ActiveCfg = Release|x64
+		{EA6CACF2-4FED-4D8C-952C-7F9950985467}.Release|x64.Build.0 = Release|x64
+		{EA6CACF2-4FED-4D8C-952C-7F9950985467}.Release|x86.ActiveCfg = Release|Win32
+		{EA6CACF2-4FED-4D8C-952C-7F9950985467}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
