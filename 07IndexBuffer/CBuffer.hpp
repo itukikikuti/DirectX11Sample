@@ -1,4 +1,4 @@
-// CBuffer.hpp
+﻿// CBuffer.hpp
 #pragma once
 #include <memory>
 #include <d3d11.h>

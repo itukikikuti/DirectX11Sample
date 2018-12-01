@@ -1,4 +1,4 @@
-// Camera.cpp
+﻿// Camera.cpp
 #include "Window.hpp"
 #include "Graphics.hpp"
 #include "Camera.hpp"

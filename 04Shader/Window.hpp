@@ -1,4 +1,4 @@
-// Window.hpp
+﻿// Window.hpp
 #pragma once
 #define OEMRESOURCE
 #include <Windows.h>

@@ -1,4 +1,4 @@
-// Source.cpp
+ï»¿// Source.cpp
 #include "Window.hpp"
 #include "Graphics.hpp"
 
@@ -20,7 +20,7 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 
     while (Refresh())
     {
-        // ‚±‚±‚ÉƒQ[ƒ€‚Ìˆ—‚ğ‘‚¢‚Ä‚¢‚­
+        // ã“ã“ã«ã‚²ãƒ¼ãƒ ã®å‡¦ç†ã‚’æ›¸ã„ã¦ã„ã
     }
 
     return 0;

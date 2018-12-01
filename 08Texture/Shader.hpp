@@ -1,4 +1,4 @@
-// Shader.hpp
+﻿// Shader.hpp
 #pragma once
 #include <string>
 #include <d3d11.h>

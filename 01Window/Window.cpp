@@ -1,4 +1,4 @@
-// Window.cpp
+﻿// Window.cpp
 #include "Window.hpp"
 
 const wchar_t* Window::name = L"GameLib";

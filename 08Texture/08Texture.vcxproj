@@ -18,6 +18,22 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.hpp" />
+    <ClInclude Include="CBuffer.hpp" />
+    <ClInclude Include="Graphics.hpp" />
+    <ClInclude Include="Mesh.hpp" />
+    <ClInclude Include="Shader.hpp" />
+    <ClInclude Include="Window.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Window.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{40F521E6-6406-4042-A21A-FD47AACC4F4D}</ProjectGuid>
@@ -114,22 +130,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="Camera.hpp" />
-    <ClInclude Include="CBuffer.hpp" />
-    <ClInclude Include="Graphics.hpp" />
-    <ClInclude Include="Mesh.hpp" />
-    <ClInclude Include="Shader.hpp" />
-    <ClInclude Include="Window.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Graphics.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Source.cpp" />
-    <ClCompile Include="Window.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

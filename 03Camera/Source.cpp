@@ -1,4 +1,4 @@
-// Source.cpp
+Ôªø// Source.cpp
 #include "Window.hpp"
 #include "Graphics.hpp"
 
@@ -25,7 +25,7 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
     while (Refresh())
     {
         camera.Start();
-        // Ç±Ç±Ç≈ï`âÊ
+        // „Åì„Åì„ÅßÊèèÁîª
         camera.Stop();
     }
 

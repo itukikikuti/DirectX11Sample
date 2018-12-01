@@ -1,4 +1,4 @@
-// Graphics.cpp
+﻿// Graphics.cpp
 #include <vector>
 #include "Window.hpp"
 #include "Graphics.hpp"
