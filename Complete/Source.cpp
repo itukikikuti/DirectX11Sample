@@ -1,7 +1,5 @@
-﻿// Source.cpp
-#include "Window.hpp"
+﻿#include "Window.hpp"
 #include "Graphics.hpp"
-
 #include "CBuffer.hpp"
 #include "Texture.hpp"
 #include "Shader.hpp"
@@ -26,28 +24,27 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 {
     Initialize();
 
-    Camera camera;
-    camera.position = DirectX::XMFLOAT3(0.0f, 2.0f, -2.0f);
-    camera.rotation = DirectX::XMFLOAT3(45.0f, 0.0f, 0.0f);
+    auto camera = std::make_unique<Camera>();
+    camera->position = DirectX::XMFLOAT3(0.0f, 2.0f, -2.0f);
+    camera->rotation = DirectX::XMFLOAT3(45.0f, 0.0f, 0.0f);
 
-    std::unique_ptr<Texture> texture = Texture::CreateFromFile(L"Texture.jpg");
+    auto texture = Texture::CreateFromFile(L"Texture.jpg");
 
-    Mesh mesh;
-    mesh.texture = *texture;
-    mesh.CreateCube(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
+    auto mesh = Mesh::CreateCube(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f));
+    mesh->texture = *texture;
 
     float angle = 0.0f;
 
     while (Refresh())
     {
-        camera.Start();
-        
+        camera->Start();
+
         angle += 1.0f;
 
-        mesh.rotation.y = angle;
-        mesh.Draw();
+        mesh->rotation.y = angle;
+        mesh->Draw();
 
-        camera.Stop();
+        camera->Stop();
     }
 
     return 0;

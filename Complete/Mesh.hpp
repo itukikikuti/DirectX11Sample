@@ -1,5 +1,5 @@
-﻿// Mesh.hpp
-#pragma once
+﻿#pragma once
+#include <memory>
 #include <vector>
 #include <d3d11.h>
 #include <DirectXMath.h>
@@ -14,8 +14,9 @@ struct Vertex
     DirectX::XMFLOAT2 uv;
 
     Vertex(DirectX::XMFLOAT3 position, DirectX::XMFLOAT2 uv)
-        : position(position), uv(uv)
     {
+        this->position = position;
+        this->uv = uv;
     }
 };
 
@@ -25,24 +26,24 @@ public:
     DirectX::XMFLOAT3 position;
     DirectX::XMFLOAT3 rotation;
     DirectX::XMFLOAT3 scale;
-    Shader& shader = Shader::GetDefault();
     Texture& texture = Texture::GetEmpty();
+    Shader& shader = Shader::GetDefault();
 
-    Mesh();
-    void Create(const std::vector<Vertex>& vertices, const std::vector<UINT>& indices);
-    void CreateTriangle(float size);
-    void CreatePlane(DirectX::XMFLOAT2 size);
-    void CreateCube(DirectX::XMFLOAT3 size);
-    void Draw();
+    Mesh(const std::vector<Vertex>& vertices, const std::vector<UINT>& indices);
+    void Draw() const;
+
+    static std::unique_ptr<Mesh> CreateTriangle();
+    static std::unique_ptr<Mesh> CreatePlane(DirectX::XMFLOAT2 size);
+    static std::unique_ptr<Mesh> CreateCube(DirectX::XMFLOAT3 size);
 
 private:
-    struct ShaderData
+    struct ShaderVariable
     {
         DirectX::XMMATRIX modelMatrix;
     };
 
-    CBuffer<ShaderData> shaderData;
+    CBuffer<ShaderVariable> cbuffer;
+    UINT vertexCount;
     Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
-    UINT vertexSize;
 };

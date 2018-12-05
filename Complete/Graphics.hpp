@@ -1,5 +1,4 @@
-﻿// Graphics.hpp
-#pragma once
+﻿#pragma once
 #include <d3d11.h>
 #include <wincodec.h>
 #include <wrl.h>

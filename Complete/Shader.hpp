@@ -1,5 +1,4 @@
-﻿// Shader.hpp
-#pragma once
+﻿#pragma once
 #include <string>
 #include <d3d11.h>
 #include <d3dcompiler.h>
@@ -9,11 +8,11 @@
 class Shader
 {
 public:
+    Shader(const std::string& source);
+    void Attach() const;
+
     static Shader& GetDefault();
     static void Compile(const std::string& source, const char* entryPoint, const char* shaderModel, ID3DBlob** out);
-
-    Shader(const std::string& source);
-    void Attach();
 
 private:
     Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader;

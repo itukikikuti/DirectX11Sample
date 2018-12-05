@@ -1,6 +1,6 @@
 ﻿#include "Window.hpp"
 
-const wchar_t* Window::name = L"GameLib";
+const std::wstring Window::name = L"GameLib";
 HWND Window::handle;
 
 void Window::Initialize()
@@ -11,10 +11,10 @@ void Window::Initialize()
     windowClass.lpfnWndProc = ProceedMessage;
     windowClass.hInstance = instance;
     windowClass.hCursor = (HCURSOR)LoadImageW(nullptr, MAKEINTRESOURCEW(OCR_NORMAL), IMAGE_CURSOR, 0, 0, LR_SHARED);
-    windowClass.lpszClassName = name;
+    windowClass.lpszClassName = name.c_str();
     RegisterClassW(&windowClass);
 
-    handle = CreateWindowW(name, name, WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, instance, nullptr);
+    handle = CreateWindowW(name.c_str(), name.c_str(), WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, instance, nullptr);
 
     SetSize(640, 480);
 
@@ -26,12 +26,12 @@ HWND Window::GetHandle()
     return handle;
 }
 
-DirectX::XMINT2 Window::GetSize()
+DirectX::XMUINT2 Window::GetSize()
 {
     RECT clientRect = {};
     GetClientRect(handle, &clientRect);
 
-    return DirectX::XMINT2(clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
+    return DirectX::XMUINT2(clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
 }
 
 void Window::SetSize(int width, int height)

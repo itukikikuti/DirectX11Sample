@@ -1,12 +1,11 @@
-﻿// Graphics.cpp
-#include <vector>
+﻿#include <vector>
 #include "Window.hpp"
 #include "Graphics.hpp"
 
 Microsoft::WRL::ComPtr<ID3D11Device> Graphics::device;
 Microsoft::WRL::ComPtr<ID3D11DeviceContext> Graphics::context;
 Microsoft::WRL::ComPtr<IDXGISwapChain> Graphics::swapChain;
-Microsoft::WRL::ComPtr<IWICImagingFactory> Graphics::imageFactory = nullptr;
+Microsoft::WRL::ComPtr<IWICImagingFactory> Graphics::imageFactory;
 
 void Graphics::Initialize()
 {
@@ -45,6 +44,13 @@ void Graphics::Initialize()
         if (SUCCEEDED(r))
             break;
     }
+
+    D3D11_VIEWPORT viewport = {};
+    viewport.Width = (float)Window::GetSize().x;
+    viewport.Height = (float)Window::GetSize().y;
+    viewport.MinDepth = 0.0f;
+    viewport.MaxDepth = 1.0f;
+    context->RSSetViewports(1, &viewport);
 
     CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory, reinterpret_cast<void**>(imageFactory.GetAddressOf()));
 }

@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <memory>
+#include <string>
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include <wrl.h>
@@ -6,13 +8,13 @@
 class Texture
 {
 public:
-    static Texture& GetEmpty();
-    static std::unique_ptr<Texture> CreateFromFile(const wchar_t* filePath);
+    Texture(const void* buffer, int width, int height);
+    ID3D11Texture2D& GetTexture() const;
+    DirectX::XMUINT2 GetSize() const;
+    void Attach(int slot) const;
 
-    Texture(const BYTE* buffer, int width, int height);
-    ID3D11Texture2D& GetTexture();
-    DirectX::XMUINT2 GetSize();
-    void Attach(int slot);
+    static Texture& GetEmpty();
+    static std::unique_ptr<Texture> CreateFromFile(const std::wstring& filePath);
 
 private:
     DirectX::XMUINT2 size;

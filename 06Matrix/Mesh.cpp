@@ -30,7 +30,7 @@ Mesh::Mesh()
 
 void Mesh::Draw()
 {
-    shaderData.Get().modelMatrix = DirectX::XMMatrixTranspose(
+    cbuffer.Get().modelMatrix = DirectX::XMMatrixTranspose(
         DirectX::XMMatrixScaling(scale.x, scale.y, scale.z) *
         DirectX::XMMatrixRotationRollPitchYaw(
             DirectX::XMConvertToRadians(rotation.x),
@@ -40,7 +40,7 @@ void Mesh::Draw()
         DirectX::XMMatrixTranslation(position.x, position.y, position.z)
     );
 
-    shaderData.Attach(0);
+    cbuffer.Attach(0);
 
     shader.Attach();
 

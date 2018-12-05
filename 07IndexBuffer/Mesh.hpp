@@ -39,7 +39,7 @@ private:
         DirectX::XMMATRIX modelMatrix;
     };
 
-    CBuffer<ShaderData> shaderData;
+    CBuffer<ShaderData> cbuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
     UINT vertexSize;

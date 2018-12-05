@@ -117,7 +117,6 @@
   <ItemGroup>
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="CBuffer.hpp" />
-    <ClInclude Include="GameLib.hpp" />
     <ClInclude Include="Graphics.hpp" />
     <ClInclude Include="Mesh.hpp" />
     <ClInclude Include="Shader.hpp" />

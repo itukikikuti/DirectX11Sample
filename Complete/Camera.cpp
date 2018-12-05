@@ -1,23 +1,19 @@
 ﻿#include "Window.hpp"
+#include "Graphics.hpp"
 #include "Camera.hpp"
 
 Camera::Camera()
 {
     position = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
     rotation = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+    color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> texture = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> texture;
     Graphics::GetSwapChain().GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(texture.GetAddressOf()));
 
     Graphics::GetDevice().CreateRenderTargetView(texture.Get(), nullptr, renderTargetView.GetAddressOf());
 
-    D3D11_VIEWPORT viewPort = {};
-    viewPort.Width = (float)Window::GetSize().x;
-    viewPort.Height = (float)Window::GetSize().y;
-    viewPort.MaxDepth = 1.0f;
-    Graphics::GetContext().RSSetViewports(1, &viewPort);
-
-    shaderData.Get().projectionMatrix = DirectX::XMMatrixTranspose(
+    cbuffer.Get().projectionMatrix = DirectX::XMMatrixTranspose(
         DirectX::XMMatrixPerspectiveFovLH(
             DirectX::XMConvertToRadians(60.0f),
             (float)Window::GetSize().x / (float)Window::GetSize().y,
@@ -27,9 +23,9 @@ Camera::Camera()
     );
 }
 
-void Camera::Start()
+void Camera::Start() const
 {
-    shaderData.Get().viewMatrix = DirectX::XMMatrixTranspose(
+    cbuffer.Get().viewMatrix = DirectX::XMMatrixTranspose(
         DirectX::XMMatrixInverse(
             nullptr,
             DirectX::XMMatrixRotationRollPitchYaw(
@@ -41,14 +37,14 @@ void Camera::Start()
         )
     );
 
-    shaderData.Attach(1);
+    cbuffer.Attach(1);
 
     Graphics::GetContext().OMSetRenderTargets(1, renderTargetView.GetAddressOf(), nullptr);
 
-    float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    float clearColor[4] = { color.x, color.y, color.z, color.w };
     Graphics::GetContext().ClearRenderTargetView(renderTargetView.Get(), clearColor);
 }
 
-void Camera::Stop()
+void Camera::Stop() const
 {
 }

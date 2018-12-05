@@ -1,5 +1,4 @@
-﻿// CBuffer.hpp
-#pragma once
+﻿#pragma once
 #include <memory>
 #include <d3d11.h>
 #include <wrl.h>
@@ -11,7 +10,7 @@ class CBuffer
 public:
     CBuffer()
     {
-        data = std::make_unique<T>();
+        instance = std::make_unique<T>();
 
         D3D11_BUFFER_DESC cbufferDesc = {};
         cbufferDesc.ByteWidth = sizeof(T);
@@ -19,18 +18,20 @@ public:
         cbufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
         Graphics::GetDevice().CreateBuffer(&cbufferDesc, nullptr, buffer.GetAddressOf());
     }
-    T& Get()
+
+    T& Get() const
     {
-        return *data.get();
+        return *instance.get();
     }
-    void Attach(int slot)
+
+    void Attach(int slot) const
     {
-        Graphics::GetContext().UpdateSubresource(buffer.Get(), 0, nullptr, data.get(), 0, 0);
+        Graphics::GetContext().UpdateSubresource(buffer.Get(), 0, nullptr, instance.get(), 0, 0);
         Graphics::GetContext().VSSetConstantBuffers(slot, 1, buffer.GetAddressOf());
         Graphics::GetContext().PSSetConstantBuffers(slot, 1, buffer.GetAddressOf());
     }
 
 private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
-    std::unique_ptr<T> data;
+    std::unique_ptr<T> instance;
 };
