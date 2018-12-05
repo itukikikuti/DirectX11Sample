@@ -39,7 +39,7 @@ public:
 private:
     struct ShaderVariable
     {
-        DirectX::XMMATRIX modelMatrix;
+        DirectX::XMFLOAT4X4 modelMatrix;
     };
 
     CBuffer<ShaderVariable> cbuffer;

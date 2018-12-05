@@ -13,7 +13,7 @@ Camera::Camera()
 
     Graphics::GetDevice().CreateRenderTargetView(texture.Get(), nullptr, renderTargetView.GetAddressOf());
 
-    cbuffer.Get().projectionMatrix = DirectX::XMMatrixTranspose(
+    DirectX::XMMATRIX projectionMatrix = DirectX::XMMatrixTranspose(
         DirectX::XMMatrixPerspectiveFovLH(
             DirectX::XMConvertToRadians(60.0f),
             (float)Window::GetSize().x / (float)Window::GetSize().y,
@@ -21,11 +21,13 @@ Camera::Camera()
             1000.0f
         )
     );
+
+    DirectX::XMStoreFloat4x4(&cbuffer.Get().projectionMatrix, projectionMatrix);
 }
 
 void Camera::Start() const
 {
-    cbuffer.Get().viewMatrix = DirectX::XMMatrixTranspose(
+    DirectX::XMMATRIX viewMatrix = DirectX::XMMatrixTranspose(
         DirectX::XMMatrixInverse(
             nullptr,
             DirectX::XMMatrixRotationRollPitchYaw(
@@ -36,6 +38,8 @@ void Camera::Start() const
             DirectX::XMMatrixTranslation(position.x, position.y, position.z)
         )
     );
+
+    DirectX::XMStoreFloat4x4(&cbuffer.Get().viewMatrix, viewMatrix);
 
     cbuffer.Attach(1);
 

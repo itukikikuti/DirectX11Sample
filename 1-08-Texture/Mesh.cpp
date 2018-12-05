@@ -33,7 +33,7 @@ Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<UINT>& indices
 
 void Mesh::Draw() const
 {
-    cbuffer.Get().modelMatrix = DirectX::XMMatrixTranspose(
+    DirectX::XMMATRIX modelMatrix = DirectX::XMMatrixTranspose(
         DirectX::XMMatrixScaling(scale.x, scale.y, scale.z) *
         DirectX::XMMatrixRotationRollPitchYaw(
             DirectX::XMConvertToRadians(rotation.x),
@@ -42,6 +42,8 @@ void Mesh::Draw() const
         ) *
         DirectX::XMMatrixTranslation(position.x, position.y, position.z)
     );
+
+    DirectX::XMStoreFloat4x4(&cbuffer.Get().modelMatrix, modelMatrix);
 
     cbuffer.Attach(0);
     texture.Attach(0);

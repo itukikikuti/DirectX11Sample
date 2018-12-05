@@ -18,8 +18,8 @@ public:
 private:
     struct ShaderVariable
     {
-        DirectX::XMMATRIX viewMatrix;
-        DirectX::XMMATRIX projectionMatrix;
+        DirectX::XMFLOAT4X4 viewMatrix;
+        DirectX::XMFLOAT4X4 projectionMatrix;
     };
 
     CBuffer<ShaderVariable> cbuffer;
