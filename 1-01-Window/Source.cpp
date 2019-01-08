@@ -1,6 +1,6 @@
 ﻿#include "Window.h"
 
-int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
+int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
     Window::Initialize();
 

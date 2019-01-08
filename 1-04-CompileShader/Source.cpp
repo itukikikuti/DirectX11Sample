@@ -17,7 +17,7 @@ bool Refresh()
     return Window::Update();
 }
 
-int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
+int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
     Initialize();
 
