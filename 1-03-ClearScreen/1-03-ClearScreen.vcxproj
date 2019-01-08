@@ -121,9 +121,9 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.hpp" />
-    <ClInclude Include="Graphics.hpp" />
-    <ClInclude Include="Window.hpp" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Graphics.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

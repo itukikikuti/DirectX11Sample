@@ -32,16 +32,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Shader.hpp">
+    <ClInclude Include="Camera.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Window.hpp">
+    <ClInclude Include="Graphics.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.hpp">
+    <ClInclude Include="Shader.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics.hpp">
+    <ClInclude Include="Window.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>

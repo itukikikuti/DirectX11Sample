@@ -115,12 +115,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.hpp" />
-    <ClInclude Include="CBuffer.hpp" />
-    <ClInclude Include="Graphics.hpp" />
-    <ClInclude Include="Mesh.hpp" />
-    <ClInclude Include="Shader.hpp" />
-    <ClInclude Include="Window.hpp" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="CBuffer.h" />
+    <ClInclude Include="Graphics.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />

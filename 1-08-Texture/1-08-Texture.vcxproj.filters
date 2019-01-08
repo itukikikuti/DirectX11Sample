@@ -15,25 +15,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Shader.hpp">
+    <ClInclude Include="Camera.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.hpp">
+    <ClInclude Include="CBuffer.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Window.hpp">
+    <ClInclude Include="Graphics.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.hpp">
+    <ClInclude Include="Mesh.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="CBuffer.hpp">
+    <ClInclude Include="Shader.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics.hpp">
+    <ClInclude Include="Texture.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.hpp">
+    <ClInclude Include="Window.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
