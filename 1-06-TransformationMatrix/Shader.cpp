@@ -1,7 +1,7 @@
 ﻿#include <memory>
 #include <vector>
-#include "Graphics.hpp"
-#include "Shader.hpp"
+#include "Graphics.h"
+#include "Shader.h"
 
 Shader::Shader(const std::string& source)
 {

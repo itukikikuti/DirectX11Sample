@@ -1,6 +1,6 @@
 ﻿#include <vector>
-#include "Window.hpp"
-#include "Graphics.hpp"
+#include "Window.h"
+#include "Graphics.h"
 
 Microsoft::WRL::ComPtr<ID3D11Device> Graphics::device;
 Microsoft::WRL::ComPtr<ID3D11DeviceContext> Graphics::context;

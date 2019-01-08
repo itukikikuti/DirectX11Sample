@@ -4,8 +4,8 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include <wrl.h>
-#include "Cbuffer.hpp"
-#include "Shader.hpp"
+#include "Cbuffer.h"
+#include "Shader.h"
 
 struct Vertex
 {

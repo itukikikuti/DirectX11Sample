@@ -1,4 +1,4 @@
-﻿#include "Window.hpp"
+﻿#include "Window.h"
 
 int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 {

@@ -1,5 +1,5 @@
-﻿#include "Window.hpp"
-#include "Graphics.hpp"
+﻿#include "Window.h"
+#include "Graphics.h"
 
 void Initialize()
 {

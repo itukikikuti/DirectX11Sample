@@ -1,4 +1,4 @@
-﻿#include "Window.hpp"
+﻿#include "Window.h"
 
 const std::wstring Window::name = L"GameLib";
 HWND Window::handle;

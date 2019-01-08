@@ -4,7 +4,7 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include <wrl.h>
-#include "Shader.hpp"
+#include "Shader.h"
 
 struct Vertex
 {

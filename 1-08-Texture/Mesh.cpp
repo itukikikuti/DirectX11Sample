@@ -1,5 +1,5 @@
-﻿#include "Graphics.hpp"
-#include "Mesh.hpp"
+﻿#include "Graphics.h"
+#include "Mesh.h"
 
 Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<UINT>& indices)
 {

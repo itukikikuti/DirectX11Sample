@@ -2,7 +2,7 @@
 #include <memory>
 #include <d3d11.h>
 #include <wrl.h>
-#include "Graphics.hpp"
+#include "Graphics.h"
 
 template <class T>
 class CBuffer

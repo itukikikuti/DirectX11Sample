@@ -2,7 +2,7 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include <wrl.h>
-#include "Cbuffer.hpp"
+#include "Cbuffer.h"
 
 class Camera
 {

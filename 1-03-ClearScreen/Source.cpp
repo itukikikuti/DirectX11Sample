@@ -1,6 +1,6 @@
-﻿#include "Window.hpp"
-#include "Graphics.hpp"
-#include "Camera.hpp"
+﻿#include "Window.h"
+#include "Graphics.h"
+#include "Camera.h"
 
 void Initialize()
 {

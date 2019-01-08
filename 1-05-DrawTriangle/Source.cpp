@@ -1,8 +1,8 @@
-﻿#include "Window.hpp"
-#include "Graphics.hpp"
-#include "Shader.hpp"
-#include "Camera.hpp"
-#include "Mesh.hpp"
+﻿#include "Window.h"
+#include "Graphics.h"
+#include "Shader.h"
+#include "Camera.h"
+#include "Mesh.h"
 
 void Initialize()
 {

@@ -1,8 +1,8 @@
 ﻿#include <cstdint>
 #include <memory>
 #include <wincodec.h>
-#include "Graphics.hpp"
-#include "Texture.hpp"
+#include "Graphics.h"
+#include "Texture.h"
 
 Texture::Texture(const void* buffer, int width, int height)
 {

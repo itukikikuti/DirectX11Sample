@@ -1,7 +1,7 @@
-﻿#include "Window.hpp"
-#include "Graphics.hpp"
-#include "Shader.hpp"
-#include "Camera.hpp"
+﻿#include "Window.h"
+#include "Graphics.h"
+#include "Shader.h"
+#include "Camera.h"
 
 void Initialize()
 {
