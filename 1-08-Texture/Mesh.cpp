@@ -1,11 +1,8 @@
-﻿#include "Graphics.h"
-#include "Mesh.h"
+﻿#include "Library.h"
 
 Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<UINT>& indices)
 {
-    position = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
-    rotation = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
-    scale = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
+	InitializeLibrary();
 
     vertexCount = (UINT)indices.size();
 

@@ -1,12 +1,10 @@
-﻿#include <cstdint>
-#include <memory>
-#include <wincodec.h>
-#include "Graphics.h"
-#include "Texture.h"
+﻿#include "Library.h"
 
 Texture::Texture(const void* buffer, int width, int height)
 {
-    size = DirectX::XMUINT2(width, height);
+	InitializeLibrary();
+
+	size = DirectX::XMUINT2(width, height);
 
     D3D11_TEXTURE2D_DESC textureDesc = {};
     textureDesc.Width = size.x;
@@ -62,7 +60,7 @@ void Texture::Attach(int slot) const
 
 Texture& Texture::GetEmpty()
 {
-    static std::unique_ptr<Texture> texture;
+    static std::unique_ptr<Texture> texture = nullptr;
 
     if (texture == nullptr)
     {
@@ -75,6 +73,8 @@ Texture& Texture::GetEmpty()
 
 std::unique_ptr<Texture> Texture::CreateFromFile(const std::wstring& filePath)
 {
+	InitializeLibrary();
+
     Microsoft::WRL::ComPtr<IWICBitmapDecoder> decoder = nullptr;
     Graphics::GetImageFactory().CreateDecoderFromFilename(filePath.c_str(), 0, GENERIC_READ, WICDecodeMetadataCacheOnDemand, decoder.GetAddressOf());
 

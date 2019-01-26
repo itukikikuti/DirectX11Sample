@@ -36,6 +36,9 @@
     <ClInclude Include="Window.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Library.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">

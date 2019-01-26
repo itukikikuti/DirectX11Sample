@@ -1,12 +1,5 @@
 ﻿#pragma once
-#include <memory>
-#include <vector>
-#include <d3d11.h>
-#include <DirectXMath.h>
-#include <wrl.h>
-#include "Cbuffer.h"
-#include "Texture.h"
-#include "Shader.h"
+#include "Library.h"
 
 struct Vertex
 {
@@ -23,9 +16,9 @@ struct Vertex
 class Mesh
 {
 public:
-    DirectX::XMFLOAT3 position;
-    DirectX::XMFLOAT3 rotation;
-    DirectX::XMFLOAT3 scale;
+    DirectX::XMFLOAT3 position = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+    DirectX::XMFLOAT3 rotation = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+    DirectX::XMFLOAT3 scale = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
     Texture& texture = Texture::GetEmpty();
     Shader& shader = Shader::GetDefault();
 
@@ -44,6 +37,6 @@ private:
 
     CBuffer<ShaderVariable> cbuffer;
     UINT vertexCount;
-    Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
-    Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = nullptr;
 };

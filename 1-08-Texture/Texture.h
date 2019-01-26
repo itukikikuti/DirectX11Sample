@@ -1,9 +1,5 @@
 ﻿#pragma once
-#include <memory>
-#include <string>
-#include <d3d11.h>
-#include <DirectXMath.h>
-#include <wrl.h>
+#include "Library.h"
 
 class Texture
 {
@@ -18,7 +14,7 @@ public:
 
 private:
     DirectX::XMUINT2 size;
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> texture;
-    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView;
-    Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState;
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> texture = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState = nullptr;
 };

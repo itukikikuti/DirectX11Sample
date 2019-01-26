@@ -1,14 +1,10 @@
-﻿#include "Window.h"
-#include "Graphics.h"
-#include "Camera.h"
+﻿#include "Library.h"
 
 Camera::Camera()
 {
-    position = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
-    rotation = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
-    color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	InitializeLibrary();
 
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> texture;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> texture = nullptr;
     Graphics::GetSwapChain().GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(texture.GetAddressOf()));
 
     Graphics::GetDevice().CreateRenderTargetView(texture.Get(), nullptr, renderTargetView.GetAddressOf());

@@ -1,20 +1,21 @@
-﻿#include "Window.h"
+﻿#include "Library.h"
 
-const std::wstring Window::name = L"GameLib";
-HWND Window::handle;
+HWND Window::handle = nullptr;
 
 void Window::Initialize()
 {
-    HINSTANCE instance = GetModuleHandleW(nullptr);
+	const wchar_t* name = L"GameLib";
+
+	HINSTANCE instance = GetModuleHandleW(nullptr);
 
     WNDCLASSW windowClass = {};
     windowClass.lpfnWndProc = ProceedMessage;
     windowClass.hInstance = instance;
     windowClass.hCursor = (HCURSOR)LoadImageW(nullptr, MAKEINTRESOURCEW(OCR_NORMAL), IMAGE_CURSOR, 0, 0, LR_SHARED);
-    windowClass.lpszClassName = name.c_str();
+    windowClass.lpszClassName = name;
     RegisterClassW(&windowClass);
 
-    handle = CreateWindowW(name.c_str(), name.c_str(), WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, instance, nullptr);
+    handle = CreateWindowW(name, name, WS_OVERLAPPEDWINDOW, 0, 0, 0, 0, nullptr, nullptr, instance, nullptr);
 
     SetSize(640, 480);
 

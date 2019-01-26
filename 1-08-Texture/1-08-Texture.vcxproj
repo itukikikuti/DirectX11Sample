@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{22FB8C14-78FC-4391-8693-F33DAD07671B}</ProjectGuid>
     <RootNamespace>My108Texture</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -118,6 +118,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CBuffer.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="Library.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Texture.h" />
