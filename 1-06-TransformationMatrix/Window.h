@@ -1,8 +1,5 @@
 ﻿#pragma once
-#define OEMRESOURCE
-#include <string>
-#include <Windows.h>
-#include <DirectXMath.h>
+#include "Library.h"
 
 class Window
 {
@@ -14,7 +11,6 @@ public:
     static bool Update();
 
 private:
-    static const std::wstring name;
     static HWND handle;
 
     static LRESULT CALLBACK ProceedMessage(HWND window, UINT message, WPARAM wParam, LPARAM lParam);

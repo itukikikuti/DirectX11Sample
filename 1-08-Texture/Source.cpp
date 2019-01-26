@@ -2,7 +2,7 @@
 
 int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-	InitializeLibrary();
+    InitializeLibrary();
 
     auto camera = std::make_unique<Camera>();
     camera->position = DirectX::XMFLOAT3(0.0f, 2.0f, -2.0f);

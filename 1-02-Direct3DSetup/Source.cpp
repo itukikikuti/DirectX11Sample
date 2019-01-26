@@ -1,25 +1,10 @@
-﻿#include "Window.h"
-#include "Graphics.h"
-
-void Initialize()
-{
-    CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-    Window::Initialize();
-    Graphics::Initialize();
-}
-
-bool Refresh()
-{
-    Graphics::Update();
-    return Window::Update();
-}
+﻿#include "Library.h"
 
 int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-    Initialize();
+    InitializeLibrary();
 
-    while (Refresh())
+    while (UpdateLibrary())
     {
         // ここにゲームの処理を書いていく
     }

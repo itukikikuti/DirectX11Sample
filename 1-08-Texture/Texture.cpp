@@ -2,9 +2,9 @@
 
 Texture::Texture(const void* buffer, int width, int height)
 {
-	InitializeLibrary();
+    InitializeLibrary();
 
-	size = DirectX::XMUINT2(width, height);
+    size = DirectX::XMUINT2(width, height);
 
     D3D11_TEXTURE2D_DESC textureDesc = {};
     textureDesc.Width = size.x;
@@ -73,7 +73,7 @@ Texture& Texture::GetEmpty()
 
 std::unique_ptr<Texture> Texture::CreateFromFile(const std::wstring& filePath)
 {
-	InitializeLibrary();
+    InitializeLibrary();
 
     Microsoft::WRL::ComPtr<IWICBitmapDecoder> decoder = nullptr;
     Graphics::GetImageFactory().CreateDecoderFromFilename(filePath.c_str(), 0, GENERIC_READ, WICDecodeMetadataCacheOnDemand, decoder.GetAddressOf());

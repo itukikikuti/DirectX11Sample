@@ -1,10 +1,8 @@
-﻿#include <vector>
-#include "Window.h"
-#include "Graphics.h"
+﻿#include "Library.h"
 
-Microsoft::WRL::ComPtr<ID3D11Device> Graphics::device;
-Microsoft::WRL::ComPtr<ID3D11DeviceContext> Graphics::context;
-Microsoft::WRL::ComPtr<IDXGISwapChain> Graphics::swapChain;
+Microsoft::WRL::ComPtr<ID3D11Device> Graphics::device = nullptr;
+Microsoft::WRL::ComPtr<ID3D11DeviceContext> Graphics::context = nullptr;
+Microsoft::WRL::ComPtr<IDXGISwapChain> Graphics::swapChain = nullptr;
 
 void Graphics::Initialize()
 {
@@ -14,13 +12,6 @@ void Graphics::Initialize()
         D3D_DRIVER_TYPE_WARP,
         D3D_DRIVER_TYPE_REFERENCE,
         D3D_DRIVER_TYPE_SOFTWARE,
-    };
-
-    std::vector<D3D_FEATURE_LEVEL> featureLevels
-    {
-        D3D_FEATURE_LEVEL_11_0,
-        D3D_FEATURE_LEVEL_10_1,
-        D3D_FEATURE_LEVEL_10_0,
     };
 
     DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
@@ -36,13 +27,17 @@ void Graphics::Initialize()
     swapChainDesc.OutputWindow = Window::GetHandle();
     swapChainDesc.Windowed = true;
 
+    HRESULT result;
     for (size_t i = 0; i < driverTypes.size(); i++)
     {
-        HRESULT r = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[i], nullptr, 0, featureLevels.data(), (UINT)featureLevels.size(), D3D11_SDK_VERSION, &swapChainDesc, swapChain.GetAddressOf(), device.GetAddressOf(), nullptr, context.GetAddressOf());
+        result = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[i], nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &swapChainDesc, swapChain.GetAddressOf(), device.GetAddressOf(), nullptr, context.GetAddressOf());
 
-        if (SUCCEEDED(r))
+        if (SUCCEEDED(result))
             break;
     }
+
+    if (FAILED(result))
+        return;
 
     D3D11_VIEWPORT viewport = {};
     viewport.Width = (float)Window::GetSize().x;

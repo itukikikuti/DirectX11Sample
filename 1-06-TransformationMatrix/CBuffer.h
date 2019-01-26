@@ -1,8 +1,5 @@
 ﻿#pragma once
-#include <memory>
-#include <d3d11.h>
-#include <wrl.h>
-#include "Graphics.h"
+#include "Library.h"
 
 template <class T>
 class CBuffer
@@ -10,6 +7,8 @@ class CBuffer
 public:
     CBuffer()
     {
+        InitializeLibrary();
+
         instance = std::make_unique<T>();
 
         D3D11_BUFFER_DESC cbufferDesc = {};
@@ -32,6 +31,6 @@ public:
     }
 
 private:
-    Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
-    std::unique_ptr<T> instance;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> buffer = nullptr;
+    std::unique_ptr<T> instance = nullptr;
 };

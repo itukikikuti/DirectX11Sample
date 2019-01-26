@@ -1,10 +1,5 @@
 ﻿#pragma once
-#include <memory>
-#include <vector>
-#include <d3d11.h>
-#include <DirectXMath.h>
-#include <wrl.h>
-#include "Shader.h"
+#include "Library.h"
 
 struct Vertex
 {
@@ -28,5 +23,5 @@ public:
 
 private:
     UINT vertexCount;
-    Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
 };

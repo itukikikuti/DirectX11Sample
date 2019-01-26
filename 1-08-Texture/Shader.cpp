@@ -2,9 +2,9 @@
 
 Shader::Shader(const std::string& source)
 {
-	InitializeLibrary();
+    InitializeLibrary();
 
-	Microsoft::WRL::ComPtr<ID3DBlob> vertexShaderBlob = nullptr;
+    Microsoft::WRL::ComPtr<ID3DBlob> vertexShaderBlob = nullptr;
     Compile(source, "VSMain", "vs_5_0", vertexShaderBlob.GetAddressOf());
 
     Graphics::GetDevice().CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), nullptr, vertexShader.GetAddressOf());

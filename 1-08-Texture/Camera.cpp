@@ -2,9 +2,9 @@
 
 Camera::Camera()
 {
-	InitializeLibrary();
+    InitializeLibrary();
 
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> texture = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> texture = nullptr;
     Graphics::GetSwapChain().GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(texture.GetAddressOf()));
 
     Graphics::GetDevice().CreateRenderTargetView(texture.Get(), nullptr, renderTargetView.GetAddressOf());

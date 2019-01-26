@@ -2,7 +2,7 @@
 
 Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<UINT>& indices)
 {
-	InitializeLibrary();
+    InitializeLibrary();
 
     vertexCount = (UINT)indices.size();
 

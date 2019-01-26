@@ -7,9 +7,9 @@ class CBuffer
 public:
     CBuffer()
     {
-		InitializeLibrary();
+        InitializeLibrary();
 
-		instance = std::make_unique<T>();
+        instance = std::make_unique<T>();
 
         D3D11_BUFFER_DESC cbufferDesc = {};
         cbufferDesc.ByteWidth = sizeof(T);

@@ -1,9 +1,5 @@
 ﻿#pragma once
-#include <string>
-#include <d3d11.h>
-#include <d3dcompiler.h>
-#include <wrl.h>
-#pragma comment(lib, "d3dcompiler.lib")
+#include "Library.h"
 
 class Shader
 {
@@ -15,7 +11,7 @@ public:
     static void Compile(const std::string& source, const char* entryPoint, const char* shaderModel, ID3DBlob** out);
 
 private:
-    Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader;
-    Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
-    Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
+    Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout = nullptr;
 };

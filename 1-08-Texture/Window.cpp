@@ -4,9 +4,9 @@ HWND Window::handle = nullptr;
 
 void Window::Initialize()
 {
-	const wchar_t* name = L"GameLib";
+    const wchar_t* name = L"GameLib";
 
-	HINSTANCE instance = GetModuleHandleW(nullptr);
+    HINSTANCE instance = GetModuleHandleW(nullptr);
 
     WNDCLASSW windowClass = {};
     windowClass.lpfnWndProc = ProceedMessage;

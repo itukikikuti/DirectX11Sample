@@ -1,10 +1,9 @@
-﻿#include <memory>
-#include <vector>
-#include "Graphics.h"
-#include "Shader.h"
+﻿#include "Library.h"
 
 Shader::Shader(const std::string& source)
 {
+    InitializeLibrary();
+
     Microsoft::WRL::ComPtr<ID3DBlob> vertexShaderBlob = nullptr;
     Compile(source, "VSMain", "vs_5_0", vertexShaderBlob.GetAddressOf());
 
@@ -65,8 +64,5 @@ void Shader::Compile(const std::string& source, const char* entryPoint, const ch
     D3DCompile(source.c_str(), source.length(), nullptr, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, entryPoint, shaderModel, D3DCOMPILE_ENABLE_STRICTNESS, 0, out, error.GetAddressOf());
 
     if (error != nullptr)
-    {
-        OutputDebugStringA((char*)error->GetBufferPointer());
         MessageBoxA(nullptr, (char*)error->GetBufferPointer(), "Shader error", MB_ICONERROR | MB_OK);
-    }
 }

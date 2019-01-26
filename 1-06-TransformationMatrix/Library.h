@@ -10,7 +10,6 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
-#include <wincodec.h>
 #include <wrl.h>
 
 #include "Window.h"
@@ -38,11 +37,9 @@ inline bool UpdateLibrary()
 }
 
 #include "CBuffer.h"
-#include "Texture.h"
 #include "Shader.h"
 #include "Camera.h"
 #include "Mesh.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
-#pragma comment(lib, "windowscodecs.lib")

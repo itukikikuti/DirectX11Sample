@@ -28,17 +28,17 @@ void Graphics::Initialize()
     swapChainDesc.OutputWindow = Window::GetHandle();
     swapChainDesc.Windowed = true;
 
-	HRESULT result;
+    HRESULT result;
     for (size_t i = 0; i < driverTypes.size(); i++)
     {
-		result = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[i], nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &swapChainDesc, swapChain.GetAddressOf(), device.GetAddressOf(), nullptr, context.GetAddressOf());
+        result = D3D11CreateDeviceAndSwapChain(nullptr, driverTypes[i], nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &swapChainDesc, swapChain.GetAddressOf(), device.GetAddressOf(), nullptr, context.GetAddressOf());
 
         if (SUCCEEDED(result))
             break;
     }
 
-	if (FAILED(result))
-		return;
+    if (FAILED(result))
+        return;
 
     D3D11_VIEWPORT viewport = {};
     viewport.Width = (float)Window::GetSize().x;
@@ -47,7 +47,7 @@ void Graphics::Initialize()
     viewport.MaxDepth = 1.0f;
     context->RSSetViewports(1, &viewport);
 
-	CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory, reinterpret_cast<void**>(imageFactory.GetAddressOf()));
+    CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory, reinterpret_cast<void**>(imageFactory.GetAddressOf()));
 }
 
 ID3D11Device& Graphics::GetDevice()

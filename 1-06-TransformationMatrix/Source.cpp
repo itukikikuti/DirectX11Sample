@@ -1,27 +1,8 @@
-﻿#include "Window.h"
-#include "Graphics.h"
-#include "CBuffer.h"
-#include "Shader.h"
-#include "Camera.h"
-#include "Mesh.h"
-
-void Initialize()
-{
-    CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-    Window::Initialize();
-    Graphics::Initialize();
-}
-
-bool Refresh()
-{
-    Graphics::Update();
-    return Window::Update();
-}
+﻿#include "Library.h"
 
 int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-    Initialize();
+    InitializeLibrary();
 
     auto camera = std::make_unique<Camera>();
     camera->position = DirectX::XMFLOAT3(0.0f, 2.0f, -2.0f);
@@ -29,15 +10,16 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
     auto mesh = Mesh::CreateTriangle();
 
-    float angle = 0.0f;
+    float t = 0.0f;
 
-    while (Refresh())
+    while (UpdateLibrary())
     {
         camera->Start();
 
-        angle += 1.0f;
-
-        mesh->rotation.y = angle;
+        t += 1.0f;
+        mesh->position.x = cosf(t * 0.01f);
+        mesh->rotation.y = t * 1.0f;
+        mesh->scale.x = 1.0f + cosf(t * 0.1f) * 0.5f;
         mesh->Draw();
 
         camera->Stop();

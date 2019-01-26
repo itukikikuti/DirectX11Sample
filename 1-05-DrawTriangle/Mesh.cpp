@@ -1,8 +1,9 @@
-﻿#include "Graphics.h"
-#include "Mesh.h"
+﻿#include "Library.h"
 
 Mesh::Mesh(const std::vector<Vertex>& vertices)
 {
+    InitializeLibrary();
+
     vertexCount = (UINT)vertices.size();
 
     D3D11_BUFFER_DESC vertexBufferDesc = {};
