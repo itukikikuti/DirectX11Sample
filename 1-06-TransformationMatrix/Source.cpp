@@ -18,8 +18,8 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
         t += 1.0f;
         mesh->position.x = cosf(t * 0.01f);
-        mesh->rotation.y = t * 1.0f;
-        mesh->scale.x = 1.0f + cosf(t * 0.1f) * 0.5f;
+        mesh->rotation.z = t * 5.0f;
+        mesh->scale.y = 1.0f + cosf(t * 0.5f) * 0.5f;
         mesh->Draw();
 
         camera->Stop();
